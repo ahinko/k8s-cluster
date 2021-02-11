@@ -12,12 +12,12 @@ The bootstrap process is taken care of the `bootstrap.sh` script. Manual steps c
 
 We have a simple bash script that run on different servers and each server has the key stored on its filesystem (`/root/.vault-key.json`). This IS NOT the most secure solution but for a Homelab its good enough for me. Also note that at least 3 of the servers having these keys would have to be compromised to be able to unseal the Vault.
 
-We have a custom service set up that exposes sealed vault instances. See the `cluster/vault/vault/extra-standby-service.yaml` manifest. When the first Vault instance has been sealed the service will expose the next sealed instance.
+We have a custom service set up that exposes sealed vault instances via a NodePort. See the `cluster/vault/vault/extra-standby-service.yaml` manifest. When the first Vault instance has been unsealed the service will expose the next sealed instance.
 
 ```bash
 #!/bin/bash
 
-VAULT_HOST=192.168.*.*
+VAULT_HOST=<NODE IP>
 VAULT_PORT=31102
 
 STATUS=$(curl -s http://$VAULT_HOST:$VAULT_PORT/v1/sys/seal-status)
