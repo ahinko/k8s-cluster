@@ -1,0 +1,20 @@
+---
+
+- name: Ensure haproxy is installed
+  apt:
+    name: haproxy
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Ensure haproxy conf is set
+  template:
+    mode: 0644
+    src: templates/haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+
+- name: Ensure haproxy is started
+  service:
+    name: haproxy
+    state: started
+    enabled: true

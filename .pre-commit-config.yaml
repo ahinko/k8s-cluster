@@ -40,7 +40,5 @@ repos:
     rev: v5.0.0
     hooks:
       - id: ansible-lint
-        always_run: false
-        files: ^ansible/
-        pass_filenames: false
-        entry: ansible-lint --force-color
+        files: \.(yaml|yml)$
+        entry: env ANSIBLE_CONFIG=./ansible/ansible.cfg ansible-lint --force-color -v

@@ -1,0 +1,17 @@
+---
+
+all:
+  children:
+    # Group for all control planes/masters/servers or whatever
+    # we want to call them.
+    # hosts should match the filenames in 'host_vars'
+    control-nodes:
+      hosts:
+        iris:
+        helios:
+        zeus:
+    # Worker group
+    # hosts should match the filenames in 'host_vars'
+    worker-nodes:
+      hosts:
+        atlas:
