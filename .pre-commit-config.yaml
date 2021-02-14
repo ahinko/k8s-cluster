@@ -42,5 +42,3 @@ repos:
       - id: ansible-lint
         files: ^ansible
         entry: env ANSIBLE_CONFIG=./ansible/ansible.cfg ansible-lint --force-color -v -c .github/ansible-lint.yaml
-        warn_list:
-          - yaml
