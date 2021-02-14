@@ -1,8 +1,8 @@
 ---
 
 # Configure a registry mirror, useful for having a pull-through cache
-mirror_registry:
-  address: "https://registry-cache.komhem.xyz"
+# mirror_registry:
+  # address: "https://registry-cache.komhem.xyz"
 
 # Configure private registries
 private_registries:
