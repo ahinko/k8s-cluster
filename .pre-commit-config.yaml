@@ -40,5 +40,7 @@ repos:
     rev: v5.0.0
     hooks:
       - id: ansible-lint
-        files: \.(yaml|yml)$
-        entry: env ANSIBLE_CONFIG=./ansible/ansible.cfg ansible-lint --force-color -v
+        files: ^ansible
+        entry: env ANSIBLE_CONFIG=./ansible/ansible.cfg ansible-lint --force-color -v -c .github/ansible-lint.yaml
+        warn_list:
+          - yaml
