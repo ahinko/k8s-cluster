@@ -1,6 +1,10 @@
 ---
 
-keepalived_unicast_src_ip: 1921.68.20.6
+# Hosts IP address
+ansible_host: 192.168.20.6
+
+# Keepalived config
+keepalived_unicast_src_ip: {{ ansible_host }}
 keepalived_unicast_peer:
   - 192.168.20.5
   - 192.168.20.7
