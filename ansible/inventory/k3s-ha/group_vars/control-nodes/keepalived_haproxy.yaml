@@ -6,7 +6,6 @@ keepalived_interface: eth0
 keepalived_pass: jfklsaj43l2j20s8ghvcx6
 keepalived_vip: 192.168.20.200
 
-haproxy_bind_address: 192.168.20.200
 haproxy_balancing_servers:
   - {name: 'helios', ip: "192.168.20.5"}
   - {name: 'iris', ip: "192.168.20.6"}

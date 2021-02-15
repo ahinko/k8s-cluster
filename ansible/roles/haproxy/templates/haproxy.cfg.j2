@@ -35,7 +35,7 @@ defaults
 # apiserver frontend which proxys to the masters
 #---------------------------------------------------------------------
 frontend apiserver
-    bind *:{{ haproxy_bind_address }}
+    bind 0.0.0.0:8443
     mode tcp
     option tcplog
     default_backend apiserver
