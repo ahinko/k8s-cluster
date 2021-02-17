@@ -5,6 +5,7 @@
     "dependencyDashboard": true,
     "dependencyDashboardTitle": "Renovate Dashboard",
     "commitBody": "Signed-off-by: Peter Ahinko <ahinko@users.noreply.github.com>",
+    "assignees": ["@ahinko"],
     // do not notify on closed unmerged PRs
     "suppressNotifications": [
         "prIgnoreNotification"
