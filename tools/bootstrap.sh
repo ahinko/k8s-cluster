@@ -115,10 +115,9 @@ kubectl apply -f tools/restore-backups/sonarr-uhd-job.yaml
 echo -e "\n${BOLD}Bootstrapping Flux.${NORMAL}"
 flux bootstrap github \
   --owner=${GITHUB_USER} \
-  --repository=k8s-at-home \
+  --repository=k8s-cluster \
   --path=cluster/ \
   --personal \
-  --private \
   --branch=main
 
 echo -e "\n${BOLD}Wait for Consul cluster to be created.${NORMAL}"
