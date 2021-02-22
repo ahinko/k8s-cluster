@@ -1,0 +1,19 @@
+---
+version: '3'
+
+vars:
+  PACKAGES: |-
+    ansible fluxcd/tap/flux kubectl pre-commit shellcheck yamllint wget yq gnu-sed
+tasks:
+  install:
+    desc: Verify that all required dependencies are installed
+    cmds:
+      - brew install {{.PACKAGES}}
+    silent: true
+
+  # Install Ansible Galaxy dependencies
+  ansible:galaxy:
+    desc: Verify that all required ansible galaxy roles are installed
+    cmds:
+      - ansible-galaxy install -r ./ansible/requirements.yaml --force
+    silent: true
