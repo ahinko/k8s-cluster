@@ -7,5 +7,5 @@ _Managed by GitOps (Flux v2), using Renovate Bot to keep everything up to date._
 <br/>
 
 
-## Warning
+### Warning
 This repo is still under heavy development and some things might not work as expected. You have been warned!
