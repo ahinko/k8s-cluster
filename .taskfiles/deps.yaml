@@ -8,7 +8,7 @@ tasks:
   install:
     desc: Verify that all required dependencies are installed
     cmds:
-      - brew install {{.PACKAGES}}
+      - arch -arm64 brew install {{.PACKAGES}}
     silent: true
 
   # Install Ansible Galaxy dependencies
