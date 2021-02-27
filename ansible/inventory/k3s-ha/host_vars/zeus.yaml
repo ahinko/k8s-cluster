@@ -10,3 +10,9 @@ keepalived_unicast_peer:
   - 192.168.20.6
 keepalived_state: MASTER
 keepalived_priority: 100
+
+# Set enabled to true to mark this host as running a distributed storage rook-ceph
+rook_ceph:
+  enabled: false
+  devices:
+    - /dev/sda
