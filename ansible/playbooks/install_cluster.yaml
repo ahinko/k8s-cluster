@@ -1,6 +1,6 @@
 ---
 
-- hosts: control-planes
+- hosts: control-nodes
   gather_facts: true
   vars_prompt:
     - name: "run_confirmation"
