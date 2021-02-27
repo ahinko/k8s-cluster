@@ -15,3 +15,5 @@ all:
     worker-nodes:
       hosts:
         atlas:
+
+    reboot_host:

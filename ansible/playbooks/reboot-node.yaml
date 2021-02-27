@@ -1,0 +1,35 @@
+---
+
+# ANSIBLE_CONFIG="../ansible.cfg" ansible-playbook reboot-node.yaml --extra-vars "reboot_host=iris"
+
+- hosts: "{{ reboot_host | default('reboot_host') }}"
+  gather_facts: true
+  any_errors_fatal: true
+
+  vars_prompt:
+    - name: "run_confirmation"
+      prompt: "Are you sure you want to reboot node ? [Y/n]"
+      default: "n"
+      private: false
+
+  pre_tasks:
+    - name: check confirmation
+      fail:
+        msg: "Abort."
+      when: run_confirmation != "Y"
+
+  tasks:
+    - name: drain node {{ inventory_hostname }}
+      ansible.builtin.command: kubectl drain --ignore-daemonsets --force --delete-emptydir-data {{ inventory_hostname }}
+
+    - name: kill k3s on {{ inventory_hostname }}
+      ansible.builtin.command: /usr/local/bin/k3s-killall.sh
+      delegate_to: localhost
+
+    - name: reboot {{ inventory_hostname }}
+      reboot:
+
+    - name: uncordon {{ inventory_hostname }}
+      become: false
+      ansible.builtin.command: kubectl uncordon {{ inventory_hostname }}
+      delegate_to: localhost
