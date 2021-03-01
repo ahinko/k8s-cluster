@@ -18,3 +18,9 @@ tasks:
     preconditions:
       - sh: "[ '{{.NODE}}' != '<no value>' ]"
         msg: "Variable .NODE is not set. Usage: NODE=node-name task reboot:node"
+
+  clean:nodes:
+    desc: Remove unused containerd images
+    cmds:
+      - ANSIBLE_CONFIG="{{ .PROJECT_ROOT }}/ansible/ansible.cfg" ansible-playbook {{ .PROJECT_ROOT }}/ansible/playbooks/clear-space.yaml
+    silent: true
