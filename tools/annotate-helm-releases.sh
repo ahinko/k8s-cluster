@@ -36,9 +36,9 @@ for helm_release in "${CLUSTER_ROOT}"/**/helm-release.yaml; do
         if [[ "${chart_status}" -eq 0 ]]; then
             echo "Annotating $(basename "$(dirname "${helm_release}")") with ${chart_name} for renovatebot..."
             # delete "renovate: registryUrl=" line
-            sed -i "/renovate: registryUrl=/d" "${helm_release}"
+            gsed -i "/renovate: registryUrl=/d" "${helm_release}"
             # insert "renovate: registryUrl=" line
-            sed -i "/.*chart: .*/i \ \ \ \ \ \ # renovate: registryUrl=${chart_url}" "${helm_release}"
+            gsed -i "/.*chart: .*/i \ \ \ \ \ \ # renovate: registryUrl=${chart_url}" "${helm_release}"
             break
         fi
     done
