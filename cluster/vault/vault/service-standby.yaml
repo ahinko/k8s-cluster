@@ -1,0 +1,31 @@
+---
+# Source: vault/templates/server-ha-standby-service.yaml
+# Service for standby Vault pod
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault-unseal
+  namespace: vault
+  labels:
+    helm.sh/chart: vault-0.8.0
+    app.kubernetes.io/name: vault
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+
+spec:
+  type: NodePort
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      port: 8200
+      targetPort: 8200
+      nodePort: 31102
+    - name: https-internal
+      port: 8201
+      targetPort: 8201
+  selector:
+    app.kubernetes.io/name: vault
+    app.kubernetes.io/instance: vault
+    component: server
+    vault-active: "false"

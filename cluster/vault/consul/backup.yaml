@@ -1,0 +1,39 @@
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: backup-consul
+  namespace: vault
+spec:
+  schedule: "40 19 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: backup-consul
+              image: registry.komhem.xyz/docker/consul-backup:1.0.1
+              args:
+                - /bin/sh
+                - /backup.sh
+              env:
+                - name: MINIO_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_ACCESS_KEY
+                - name: MINIO_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_SECRET_KEY
+                - name: MINIO_ENDPOINT
+                  value: "192.168.20.2:9000"
+                - name: MINIO_BUCKET
+                  value: "backup/consul"
+                - name: CONSUL_HOST
+                  value: "consul-consul-server.vault.svc.cluster.local"
+                - name: CONSUL_PORT
+                  value: "8500"
+          restartPolicy: OnFailure
