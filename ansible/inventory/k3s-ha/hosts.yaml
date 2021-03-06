@@ -1,0 +1,21 @@
+---
+
+all:
+  children:
+    # Group for all control planes/masters/servers or whatever
+    # we want to call them.
+    # hosts should match the filenames in 'host_vars'
+    control:
+      hosts:
+        iris:
+        helios:
+        zeus:
+    # Worker group
+    # hosts should match the filenames in 'host_vars'
+    worker:
+      hosts:
+        atlas:
+
+    # Empty group. You have to specify the host you want to reboot when calling the
+    # reboot playbook.
+    reboot_host:

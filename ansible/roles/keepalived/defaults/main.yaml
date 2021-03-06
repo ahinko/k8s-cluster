@@ -1,0 +1,10 @@
+---
+
+keepalived_state: BACKUP
+keepalived_priority: 50
+keepalived_interface: eth0
+keepalived_pass: aaa
+keepalived_vip: 192.168.0.2
+
+keepalived_unicast_src_ip: 192.168.0.1
+keepalived_unicast_peer: []

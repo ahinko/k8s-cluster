@@ -1,0 +1,10 @@
+---
+
+- hosts:
+    - control-nodes
+    - worker-nodes
+  gather_facts: true
+
+  tasks:
+    - name: remove unused containerd images
+      ansible.builtin.command: k3s crictl rmi --prune

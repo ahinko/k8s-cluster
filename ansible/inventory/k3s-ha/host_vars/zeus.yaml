@@ -1,0 +1,18 @@
+---
+
+# Hosts IP address
+ansible_host: 192.168.20.6
+
+# Keepalived config
+keepalived_unicast_src_ip: {{ ansible_host }}
+keepalived_unicast_peer:
+  - 192.168.20.5
+  - 192.168.20.6
+keepalived_state: MASTER
+keepalived_priority: 100
+
+# Set enabled to true to mark this host as running a distributed storage rook-ceph
+rook_ceph:
+  enabled: false
+  devices:
+    - /dev/sda

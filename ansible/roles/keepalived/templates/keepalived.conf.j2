@@ -1,0 +1,32 @@
+# Script used to check if HAProxy is running
+vrrp_script check_haproxy {
+    script "killall -0 haproxy" # check the haproxy process
+    interval 2 # every 2 seconds
+    weight 2 # add 2 points if OK
+}
+
+vrrp_instance VI_1 {
+    state {{ keepalived_state }}
+    interface {{ keepalived_interface }}
+    virtual_router_id 255
+    priority {{ keepalived_priority }}
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass {{ keepalived_pass }}
+    }
+    virtual_ipaddress {
+        {{ keepalived_vip }}
+    }
+
+    track_script {
+        check_haproxy
+    }
+
+    unicast_src_ip {{ keepalived_unicast_src_ip }}
+    unicast_peer {
+    {% for peer in keepalived_unicast_peer %}
+        {{ peer }}
+    {% endfor %}
+    }
+}

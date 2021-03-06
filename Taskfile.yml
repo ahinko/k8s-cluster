@@ -1,0 +1,26 @@
+---
+version: '3'
+
+vars:
+  PROJECT_ROOT:
+    sh: git rev-parse --show-toplevel
+
+includes:
+  deps: .taskfiles/deps.yaml
+
+tasks:
+  reboot:node:
+    desc: Reboot a node
+    cmds:
+      - echo "Rebooting {{ .NODE }}"
+      - ANSIBLE_CONFIG="{{ .PROJECT_ROOT }}/ansible/ansible.cfg" ansible-playbook {{ .PROJECT_ROOT }}/ansible/playbooks/reboot-node.yaml --extra-vars "reboot_host={{ .NODE }}"
+    silent: true
+    preconditions:
+      - sh: "[ '{{.NODE}}' != '<no value>' ]"
+        msg: "Variable .NODE is not set. Usage: NODE=node-name task reboot:node"
+
+  clean:nodes:
+    desc: Remove unused containerd images
+    cmds:
+      - ANSIBLE_CONFIG="{{ .PROJECT_ROOT }}/ansible/ansible.cfg" ansible-playbook {{ .PROJECT_ROOT }}/ansible/playbooks/clear-space.yaml
+    silent: true

@@ -1,0 +1,88 @@
+---
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: secrets-operator
+  namespace: vault
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://ricoberger.github.io/helm-charts
+      chart: vault-secrets-operator
+      version: 1.13.0
+      sourceRef:
+        kind: HelmRepository
+        name: ricoberger-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    replicaCount: 1
+    deploymentStrategy: {}
+
+    image:
+      repository: ricoberger/vault-secrets-operator
+      tag: 1.13.0
+      pullPolicy: IfNotPresent
+      args: []
+      volumeMounts: []
+      # - name: ca
+      #   mountPath: "/etc/vault-secrets-operator"
+
+    imagePullSecrets: []
+    nameOverride: ""
+    fullnameOverride: ""
+
+    environmentVars: []
+
+    vault:
+      address: "http://vault.vault.svc.cluster.local:8200"
+      authMethod: kubernetes
+      tokenPath: ""
+      kubernetesPath: auth/kubernetes
+      kubernetesRole: vault-secrets-operator
+      reconciliationTime: 0
+      namespaces: ""
+
+    crd:
+      create: true
+
+    rbac:
+      create: true
+      createrole: true
+      namespaced: false
+
+    serviceAccount:
+      create: true
+      name: vault-secrets-operator
+
+    # Annotations for vault-secrets-operator pod(s).
+    podAnnotations: {}
+
+    # Additional labels for the vault-secrets-operator pod(s).
+    podLabels: {}
+
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+    volumes: []
+
+    nodeSelector: {}
+
+    tolerations: []
+
+    affinity: {}
+
+    serviceMonitor:
+      enabled: false
+      labels: {}
+      interval: 10s
+      scrapeTimeout: 10s
+      honorLabels: true
+      relabelings: []
