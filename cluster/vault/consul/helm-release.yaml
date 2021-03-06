@@ -19,7 +19,7 @@ spec:
       interval: 5m
   values:
     global:
-      image: "hashicorp/consul:1.9.3"
+      image: "hashicorp/consul:1.9.4"
     server:
       enabled: true
       storage: "10Gi"
