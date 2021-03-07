@@ -83,7 +83,8 @@ kubectl apply -f cluster/rook-ceph/filesystem/
 kubectl apply -f cluster/rook-ceph/storage-class/
 
 echo -e "\n${BOLD}Deploying resources that needs to exist in the cluster before Flux can run.${NORMAL}"
-kubectl apply -f bootstrap/crds/
+kubectl apply -f cluster/cert-manager/cert-manager/crds.yaml
+kubectl apply -f cluster/vault/secrets-operator/crds.yaml
 kubectl apply -f cluster/system-upgrade/system-upgrade-controller.yaml
 
 echo -e "\n${BOLD}Setting up PVCs.${NORMAL}"
@@ -137,4 +138,4 @@ fi
 
 echo -e "\n${BOLD}Restoring Consul backup & enable Vault${NORMAL}"
 tools/restore-backups/consul-restore.sh bootstrap/consul/snapshot.tgz
-tools/bootstrap-auth-secrets-operator.sh
+tools/bootstrap/auth-secrets-operator.sh

@@ -4,6 +4,7 @@ ignore: |
   .github/
   ansible/
   *-crds.yaml
+  crds.yaml
 
 extends: default
 

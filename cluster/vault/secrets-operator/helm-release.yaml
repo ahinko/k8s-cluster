@@ -46,7 +46,7 @@ spec:
       namespaces: ""
 
     crd:
-      create: true
+      create: false
 
     rbac:
       create: true
