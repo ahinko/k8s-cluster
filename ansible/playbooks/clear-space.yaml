@@ -3,7 +3,9 @@
 - hosts:
     - control-nodes
     - worker-nodes
+  become: true
   gather_facts: true
+  any_errors_fatal: true
 
   tasks:
     - name: remove unused containerd images

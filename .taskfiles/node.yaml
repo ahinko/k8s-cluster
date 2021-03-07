@@ -1,0 +1,34 @@
+---
+version: '3'
+
+env:
+  ANSIBLE_CONFIG: ./ansible/ansible.cfg
+
+vars:
+  ANSIBLE_DIR: ./ansible
+  ANSIBLE_PLAYBOOK_DIR: "{{.ANSIBLE_DIR}}/playbooks"
+  ANSIBLE_INVENTORY_DIR: "{{.ANSIBLE_DIR}}/inventory"
+  ANSIBLE_GROUPS: control-nodes:worker-nodes
+
+tasks:
+  reboot:
+    desc: Reboot a node
+    cmds:
+      - echo "Rebooting {{ .NODE }}"
+      - ansible-playbook {{.ANSIBLE_PLAYBOOK_DIR}}/reboot-node.yaml --extra-vars "reboot_host={{ .NODE }}"
+    silent: true
+    preconditions:
+      - sh: "[ '{{.NODE}}' != '<no value>' ]"
+        msg: "Variable .NODE is not set. Usage: NODE=node-name task reboot:node"
+
+  clean:
+    desc: Remove unused containerd images
+    cmds:
+      - ansible-playbook {{.ANSIBLE_PLAYBOOK_DIR}}/clear-space.yaml
+    silent: true
+
+  update:
+    desc: Update nodes operating system
+    cmds:
+      - ansible-playbook {{.ANSIBLE_PLAYBOOK_DIR}}/update.yaml
+    silent: true
