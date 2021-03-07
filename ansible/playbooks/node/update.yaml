@@ -7,11 +7,6 @@
   gather_facts: true
   any_errors_fatal: true
 
-  pre_tasks:
-    - name: Pausing for 5 seconds...
-      pause:
-        seconds: 5
-
   tasks:
     - name: upgrade
       ansible.builtin.apt:
