@@ -1,0 +1,44 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: kube-system
+spec:
+  type: ExternalName
+  ports:
+    - name: http
+      port: 9000
+  externalName: 192.168.20.2
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minio
+  namespace: kube-system
+  annotations:
+    kubernetes.io/ingress.class: "internal"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      proxy_ssl_verify off;
+  labels:
+    app.kubernetes.io/instance: minio
+    app.kubernetes.io/name: minio
+spec:
+  rules:
+    - host: "minio.komhem.xyz"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: minio
+                port:
+                  number: 9000
+  tls:
+    - hosts:
+        - "minio.komhem.xyz"

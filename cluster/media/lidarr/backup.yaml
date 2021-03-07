@@ -1,0 +1,46 @@
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: backup-lidarr
+  namespace: media
+spec:
+  schedule: "5 12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: backup-lidarr
+              image: registry.komhem.xyz/docker/k8s-volume-backup:1.0.3
+              args:
+                - /bin/sh
+                - /backup.sh
+              env:
+                - name: MINIO_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_ACCESS_KEY
+                - name: MINIO_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_SECRET_KEY
+                - name: MINIO_ENDPOINT
+                  value: "192.168.20.2:9000"
+                - name: MINIO_BUCKET
+                  value: "backup/lidarr"
+                - name: LOCAL_PATH
+                  value: "/lidarr"
+                - name: FILE_NAME
+                  value: "lidarr"
+              volumeMounts:
+                - name: lidarr-persistent-storage
+                  mountPath: /lidarr
+          restartPolicy: OnFailure
+          volumes:
+            - name: lidarr-persistent-storage
+              persistentVolumeClaim:
+                claimName: lidarr-config

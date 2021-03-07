@@ -1,0 +1,24 @@
+---
+
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: cluster-issuer
+spec:
+  acme:
+    # You must replace this email address with your own.
+    # Let's Encrypt will use this to contact you about expiring
+    # certificates, and issues related to your account.
+    email: exclude@protonmail.com
+    # server: https://acme-staging-v02.api.letsencrypt.org/directory
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      # Secret resource that will be used to store the account's private key.
+      name: letsencrypt-production
+    solvers:
+      - dns01:
+          cloudflare:
+            email: exclude@protonmail.com
+            apiTokenSecretRef:
+              name: cert-manager-config
+              key: cloudflare-api-token

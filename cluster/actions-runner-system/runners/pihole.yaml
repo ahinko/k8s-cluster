@@ -1,0 +1,51 @@
+---
+
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: action-runner-pihole
+  namespace: actions-runner-system
+spec:
+  replicas: 1
+  template:
+    spec:
+      image: summerwind/actions-runner-dind:v2.277.1
+      dockerdWithinRunnerContainer: true
+      repository: ahinko/docker-pihole
+      env:
+        - name: REGISTRY_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: registry_username
+              name: docker-registry-credentials
+        - name: REGISTRY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: registry_password
+              name: docker-registry-credentials
+        - name: REGISTRY_URL
+          value: "registry.komhem.xyz"
+
+      resources:
+        limits:
+          cpu: "1"
+          memory: "2Gi"
+        requests:
+          cpu: "0.5"
+          memory: "0.5Gi"
+
+      volumeMounts:
+        - mountPath: /runner
+          name: runner
+      volumes:
+        - emptyDir: {}
+          name: runner
+
+      # Valid if dockerdWithinRunnerContainer is not true
+      dockerdContainerResources:
+        limits:
+          cpu: "1"
+          memory: "2Gi"
+        requests:
+          cpu: "0.5"
+          memory: "1Gi"

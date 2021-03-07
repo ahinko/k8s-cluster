@@ -1,0 +1,14 @@
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-atlas-media-pvc
+  namespace: media
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-client-atlas
+  resources:
+    requests:
+      storage: 1Mi

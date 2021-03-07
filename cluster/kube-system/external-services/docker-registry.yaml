@@ -1,0 +1,91 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-registry
+  namespace: kube-system
+spec:
+  type: ExternalName
+  ports:
+    - name: http
+      port: 5000
+  externalName: 192.168.20.2
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-registry-ui
+  namespace: kube-system
+spec:
+  type: ExternalName
+  ports:
+    - name: http
+      port: 8888
+  externalName: 192.168.20.2
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: docker-registry-ui
+  namespace: kube-system
+  annotations:
+    kubernetes.io/ingress.class: "external"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    # type of authentication
+    nginx.ingress.kubernetes.io/auth-type: basic
+    # name of the secret that contains the user/password definitions
+    nginx.ingress.kubernetes.io/auth-secret: ingress-basic-auth
+    # message to display with an appropriate context why the authentication is required
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - Registry'
+  labels:
+    app.kubernetes.io/instance: docker-registry-ui
+    app.kubernetes.io/name: docker-registry-ui
+spec:
+  rules:
+    - host: "registry.komhem.xyz"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: docker-registry-ui
+                port:
+                  number: 8888
+  tls:
+    - hosts:
+        - "registry.komhem.xyz"
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: docker-registry
+  namespace: kube-system
+  annotations:
+    kubernetes.io/ingress.class: "external"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  labels:
+    app.kubernetes.io/instance: docker-registry
+    app.kubernetes.io/name: docker-registry
+spec:
+  rules:
+    - host: "registry.komhem.xyz"
+      http:
+        paths:
+          - path: /v2
+            pathType: Prefix
+            backend:
+              service:
+                name: docker-registry
+                port:
+                  number: 5000
+  tls:
+    - hosts:
+        - "registry.komhem.xyz"

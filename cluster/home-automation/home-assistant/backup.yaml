@@ -1,0 +1,48 @@
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: backup-home-assistant
+  namespace: home-automation
+spec:
+  schedule: "0 10,22 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: backup-home-assistant
+              image: registry.komhem.xyz/docker/k8s-volume-backup:1.0.3
+              args:
+                - /bin/sh
+                - /backup.sh
+              env:
+                - name: MINIO_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_ACCESS_KEY
+                - name: MINIO_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_SECRET_KEY
+                - name: MINIO_ENDPOINT
+                  value: "192.168.20.2:9000"
+                - name: MINIO_BUCKET
+                  value: "backup/home-assistant"
+                - name: LOCAL_PATH
+                  value: "/hass"
+                - name: EXCLUDE_ARGS
+                  value: "--exclude ./home-assistant_v2.db"
+                - name: FILE_NAME
+                  value: "home-assistant"
+              volumeMounts:
+                - name: hass-persistent-storage
+                  mountPath: /hass
+          restartPolicy: OnFailure
+          volumes:
+            - name: hass-persistent-storage
+              persistentVolumeClaim:
+                claimName: home-assistant-config

@@ -1,0 +1,46 @@
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: backup-sabnzbd
+  namespace: media
+spec:
+  schedule: "25 12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: backup-sabnzbd
+              image: registry.komhem.xyz/docker/k8s-volume-backup:1.0.3
+              args:
+                - /bin/sh
+                - /backup.sh
+              env:
+                - name: MINIO_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_ACCESS_KEY
+                - name: MINIO_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_SECRET_KEY
+                - name: MINIO_ENDPOINT
+                  value: "192.168.20.2:9000"
+                - name: MINIO_BUCKET
+                  value: "backup/sabnzbd"
+                - name: LOCAL_PATH
+                  value: "/sabnzbd"
+                - name: FILE_NAME
+                  value: "sabnzbd"
+              volumeMounts:
+                - name: sabnzbd-persistent-storage
+                  mountPath: /sabnzbd
+          restartPolicy: OnFailure
+          volumes:
+            - name: sabnzbd-persistent-storage
+              persistentVolumeClaim:
+                claimName: sabnzbd-config
