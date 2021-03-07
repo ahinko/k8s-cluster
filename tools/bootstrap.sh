@@ -137,4 +137,4 @@ fi
 
 echo -e "\n${BOLD}Restoring Consul backup & enable Vault${NORMAL}"
 tools/restore-backups/consul-restore.sh bootstrap/consul/snapshot.tgz
-tools/bootstrap-auth-secrets-operator.sh
+tools/bootstrap/auth-secrets-operator.sh
