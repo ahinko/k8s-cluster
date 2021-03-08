@@ -13,8 +13,7 @@ This repo is still under heavy development and some things might not work as exp
 ## Automation
 We use a few different tools to automate as much as possible of the setup and maintenance of the cluster.
 
-* Ansible is used to setup the High Availability aspects of the cluster.
-* k3sup is used to install k3s on server and agent nodes.
+* Ansible is used to setup the High Availability aspects of the cluster as well as k3s.
 * Flux syncs the cluster with the git repo containing all configuration.
 * Renovatebot keeps the configuration up to date.
 
