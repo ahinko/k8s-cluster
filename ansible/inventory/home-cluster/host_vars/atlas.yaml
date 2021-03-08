@@ -5,6 +5,6 @@ ansible_host: 192.168.20.2
 
 # Set enabled to true to mark this host as running a distributed storage rook-ceph
 rook_ceph:
-  enabled: true
+  enabled: false
   devices:
     - /dev/sdk

@@ -1,7 +1,7 @@
 ---
 
 # Hosts IP address
-ansible_host: 192.168.20.6
+ansible_host: 192.168.20.5
 
 # Keepalived config
 keepalived_unicast_src_ip: {{ ansible_host }}
