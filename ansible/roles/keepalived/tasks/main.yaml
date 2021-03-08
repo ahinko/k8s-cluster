@@ -2,7 +2,7 @@
 
 - name: Ensure keepalived is installed
   apt:
-    name: keepalived
+    name: keepalived, libipset-dev
     state: present
     update_cache: true
     cache_valid_time: 3600
@@ -12,6 +12,13 @@
     mode: 0644
     src: templates/keepalived.conf.j2
     dest: /etc/keepalived/keepalived.conf
+
+- name: Add user
+  ansible.builtin.user:
+    name: keepalived_script
+    comment: Keepalived
+    group: users
+    create_home: false
 
 - name: Ensure keepalived is started
   service:

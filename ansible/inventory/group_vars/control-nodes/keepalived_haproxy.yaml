@@ -2,7 +2,7 @@
 
 keepalived_state: BACKUP
 keepalived_priority: 50
-keepalived_interface: eth0
+keepalived_interface: eno1
 keepalived_pass: jfklsaj43l2j20s8ghvcx6
 keepalived_vip: 192.168.20.200
 
