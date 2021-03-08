@@ -49,4 +49,4 @@ spec:
 
     service:
       type: LoadBalancer
-      loadBalancerIP: 192.168.20.201
+      loadBalancerIP: 192.168.20.220
