@@ -40,6 +40,6 @@ We use a combination of Rook-Ceph and NFS for storage. Rook-Ceph is used to setu
 [Troubleshooting & info](docs/rook-ceph.md)
 
 ## Bootstrap
-A combination of Ansible, k3sup and shell scripts is used to bootstrap the cluster.
+A combination of Ansible and shell scripts is used to bootstrap the cluster.
 
 [Read more](docs/bootstrap.md)
