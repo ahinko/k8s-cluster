@@ -1,6 +1,8 @@
 ---
 
-- hosts: control-nodes
+- hosts:
+    - control-nodes
+    - worker-nodes
   gather_facts: true
   vars_prompt:
     - name: "run_confirmation"
@@ -14,7 +16,5 @@
         msg: "Abort."
       when: run_confirmation != "Y"
   roles:
-    - {role: keepalived}
-    - {role: haproxy}
     - {role: xanmanning.k3s}
     - {role: k3s}
