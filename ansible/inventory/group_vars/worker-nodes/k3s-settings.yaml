@@ -7,3 +7,7 @@
 
 # Define the host as a control plane node
 k3s_control_node: false
+
+k3s_server:
+  node-external-ip: "{{ ansible_host }}"
+  node-ip: "{{ ansible_host }}"

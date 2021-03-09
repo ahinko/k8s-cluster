@@ -34,7 +34,7 @@ fi
 
 echo -e "\n${BOLD}Set up Calico${NORMAL}"
 kubectl apply -f cluster/tigera-operator/namespace.yaml
-kubectl apply -f cluster/tigera-operator/operator/tigera-operator.yaml
+kubectl apply -f cluster/tigera-operator/operator/tigera-operator-crds.yaml
 kubectl apply -f cluster/tigera-operator/resources/custom-resources.yaml
 
 echo "Waiting for Calico to start."

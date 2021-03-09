@@ -14,7 +14,7 @@ global
 # use if not designated in their block
 #---------------------------------------------------------------------
 defaults
-    mode                    http
+    mode                    tcp
     log                     global
     option                  httplog
     option                  dontlognull
@@ -50,5 +50,5 @@ backend apiserver
     balance     roundrobin
 
 {% for balancing_server in haproxy_balancing_servers %}
-    server {{ balancing_server.name }} {{ balancing_server.ip }}:6433 maxconn 30000 check
+    server {{ balancing_server.name }} {{ balancing_server.ip }}:6443 maxconn 30000 check
 {% endfor %}

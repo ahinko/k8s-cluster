@@ -10,8 +10,11 @@ k3s_control_node: true
 
 # k3s settings for control-plane nodes node
 k3s_server:
+  node-external-ip: "{{ ansible_host }}"
+  node-ip: "{{ ansible_host }}"
   tls-san:
-    - 192.168.20.200
+    - "{{ k3s_control_node_address }}"
+  https-listen-port: 6443
   docker: false
   flannel-backend: 'none' # This needs to be in quotes
   disable:

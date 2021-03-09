@@ -7,8 +7,8 @@ all:
     # hosts should match the filenames in 'host_vars'
     control-nodes:
       hosts:
-        #iris:
-        #helios:
+        iris:
+        helios:
         zeus:
     # Worker group
     # hosts should match the filenames in 'host_vars'

@@ -16,5 +16,5 @@
   roles:
     - {role: keepalived}
     - {role: haproxy}
-    #- {role: xanmanning.k3s}
-    #- {role: k3s}
+    - {role: xanmanning.k3s}
+    - {role: k3s}

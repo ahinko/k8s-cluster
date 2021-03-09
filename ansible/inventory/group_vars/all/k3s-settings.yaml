@@ -18,4 +18,4 @@ k3s_etcd_datastore: true
 
 # Keepalived IP & HAProxy port
 k3s_control_node_address: 192.168.20.200
-k3s_control_node_port: 8443
+k3s_control_plane_port: 8443
