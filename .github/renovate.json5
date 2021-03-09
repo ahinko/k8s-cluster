@@ -22,14 +22,14 @@
     },
     "helm-values": {
         "fileMatch": [
-            "cluster/.+helmrelease\\.yaml$"
+            "cluster/.+helm-release\\.yaml$"
         ]
     },
     "regexManagers": [
-        // regexManager to read and process HelmRelease files
+        // regexManager to read and process Helm-Release files
         {
             "fileMatch": [
-                "cluster/.+helmrelease\\.yaml$"
+                "cluster/.+helm-release\\.yaml$"
             ],
             "matchStrings": [
                 "registryUrl=(?<registryUrl>.*?)\n *chart: (?<depName>.*?)\n *version: (?<currentValue>.*)\n"
