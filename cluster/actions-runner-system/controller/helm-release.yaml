@@ -24,3 +24,6 @@ spec:
 
     env:
       TZ: "Europe/Stockholm"
+
+    authSecret:
+      create: false
