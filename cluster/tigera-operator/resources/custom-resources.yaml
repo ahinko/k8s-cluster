@@ -18,4 +18,4 @@ spec:
         nodeSelector: all()
     containerIPForwarding: Enabled
     nodeAddressAutodetectionV4:
-      canReach: 1.1.1.1
+      canReach: 192.168.20.1
