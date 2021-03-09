@@ -18,7 +18,7 @@ spec:
           env:
             - name: RESTORE_FILE
               # Update the following value with the filename of the backup you want to restore
-              value: "nodered-20210208_091007.tgz"
+              value: "**REPLACE-ME**"
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
