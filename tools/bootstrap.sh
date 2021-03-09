@@ -82,10 +82,8 @@ echo "Creating filesystem and storage class"
 kubectl apply -f cluster/rook-ceph/filesystem/
 kubectl apply -f cluster/rook-ceph/storage-class/
 
-echo -e "\n${BOLD}Deploying resources that needs to exist in the cluster before Flux can run.${NORMAL}"
-kubectl apply -f cluster/cert-manager/cert-manager/crds.yaml
-kubectl apply -f cluster/vault/secrets-operator/crds.yaml
-kubectl apply -f cluster/system-upgrade/system-upgrade-controller.yaml
+kubectl apply -f cluster/home-automation/namespace.yaml
+kubectl apply -f cluster/media/namespace.yaml
 
 echo -e "\n${BOLD}Setting up PVCs.${NORMAL}"
 kubectl apply -f cluster/home-automation/home-assistant/persistent-volume-claim.yaml
@@ -100,18 +98,10 @@ kubectl apply -f cluster/media/sabnzbd/persistent-volume-claim.yaml
 kubectl apply -f cluster/media/sonarr/persistent-volume-claim.yaml
 kubectl apply -f cluster/media/sonarr-uhd/persistent-volume-claim.yaml
 
-echo -e "\n${BOLD}Restoring data to PVCs.${NORMAL}"
-kubectl apply -f tools/restore-backups/home-assistant-job.yaml
-kubectl apply -f tools/restore-backups/node-red-job.yaml
-kubectl apply -f tools/restore-backups/zigbee2mqtt-job.yaml
-kubectl apply -f tools/restore-backups/zwave2mqtt-job.yaml
-
-kubectl apply -f tools/restore-backups/bazarr-job.yaml
-kubectl apply -f tools/restore-backups/lidarr-job.yaml
-kubectl apply -f tools/restore-backups/radarr-job.yaml
-kubectl apply -f tools/restore-backups/sabnzbd-job.yaml
-kubectl apply -f tools/restore-backups/sonarr-job.yaml
-kubectl apply -f tools/restore-backups/sonarr-uhd-job.yaml
+echo -e "\n${BOLD}Deploying resources that needs to exist in the cluster before Flux can run.${NORMAL}"
+kubectl apply -f cluster/cert-manager/cert-manager/crds.yaml
+kubectl apply -f cluster/vault/secrets-operator/crds.yaml
+kubectl apply -f cluster/system-upgrade/system-upgrade-controller/deployment.yaml
 
 echo -e "\n${BOLD}Bootstrapping Flux.${NORMAL}"
 flux bootstrap github \
@@ -139,3 +129,16 @@ fi
 echo -e "\n${BOLD}Restoring Consul backup & enable Vault${NORMAL}"
 tools/restore-backups/consul-restore.sh bootstrap/consul/snapshot.tgz
 tools/bootstrap/auth-secrets-operator.sh
+
+echo -e "\n${BOLD}Restoring data to PVCs.${NORMAL}"
+kubectl apply -f tools/restore-backups/home-assistant-job.yaml
+kubectl apply -f tools/restore-backups/node-red-job.yaml
+kubectl apply -f tools/restore-backups/zigbee2mqtt-job.yaml
+kubectl apply -f tools/restore-backups/zwave2mqtt-job.yaml
+
+kubectl apply -f tools/restore-backups/bazarr-job.yaml
+kubectl apply -f tools/restore-backups/lidarr-job.yaml
+kubectl apply -f tools/restore-backups/radarr-job.yaml
+kubectl apply -f tools/restore-backups/sabnzbd-job.yaml
+kubectl apply -f tools/restore-backups/sonarr-job.yaml
+kubectl apply -f tools/restore-backups/sonarr-uhd-job.yaml
