@@ -17,3 +17,5 @@ spec:
         natOutgoing: Enabled
         nodeSelector: all()
     containerIPForwarding: Enabled
+    nodeAddressAutodetectionV4:
+      canReach: 1.1.1.1
