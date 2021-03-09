@@ -1,0 +1,46 @@
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: backup-zigbee2mqtt
+  namespace: home-automation
+spec:
+  schedule: "20 10,22 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: backup-zigbee2mqtt
+              image: registry.komhem.xyz/docker/k8s-volume-backup:1.0.3
+              args:
+                - /bin/sh
+                - /backup.sh
+              env:
+                - name: MINIO_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_ACCESS_KEY
+                - name: MINIO_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_SECRET_KEY
+                - name: MINIO_ENDPOINT
+                  value: "192.168.20.2:9000"
+                - name: MINIO_BUCKET
+                  value: "backup/zigbee2mqtt"
+                - name: LOCAL_PATH
+                  value: "/zigbee"
+                - name: FILE_NAME
+                  value: "zigbee2mqtt"
+              volumeMounts:
+                - name: zigbee2mqtt-persistent-storage
+                  mountPath: /zigbee
+          restartPolicy: OnFailure
+          volumes:
+            - name: zigbee2mqtt-persistent-storage
+              persistentVolumeClaim:
+                claimName: zigbee2mqtt-data

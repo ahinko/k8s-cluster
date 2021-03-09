@@ -1,0 +1,133 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: frigate
+  namespace: home-automation
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: frigate
+      version: 4.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: blakeblackshear/frigate
+      tag: 0.5.2
+    podAnnotations:
+      configmap.reloader.stakater.com/reload: "frigate"
+      secret.reloader.stakater.com/reload: "frigate-mqtt-secrets"
+    timezone: Europe/Stockholm
+
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "internal"
+      hosts:
+        - "frigate.komhem.xyz"
+      tls:
+        - hosts:
+            - "frigate.komhem.xyz"
+
+    coral:
+      enabled: true
+
+    config: |
+      mqtt:
+        host: mosquitto
+        topic_prefix: frigate
+
+      objects:
+        track:
+          - person
+        filters:
+          person:
+            min_area: 5000
+            max_area: 100000
+            threshold: 0.90
+
+      cameras:
+        frontyard_terrace:
+          ffmpeg:
+            input: rtsp://192.168.0.1:7447/7VhaBZxtCpKFV54H
+          height: 1080
+          width: 1920
+          take_frame: 5
+          fps: 24
+          snapshots:
+            show_timestamp: false
+
+        backyard_livingroom:
+          ffmpeg:
+            input: rtsp://192.168.0.1:7447/k8xv9uFTcVuVz4Pi
+          height: 1080
+          width: 1920
+          take_frame: 5
+          fps: 24
+          snapshots:
+            show_timestamp: false
+
+        backyard_terrace:
+          ffmpeg:
+            input: rtsp://192.168.0.1:7447/UCfkcmaIYCQanbjj
+          height: 1080
+          width: 1920
+          take_frame: 5
+          fps: 24
+          snapshots:
+            show_timestamp: false
+
+        east_side:
+          ffmpeg:
+            input: rtsp://192.168.0.1:7447/bD35LvIY0mVXDGAV
+          height: 1080
+          width: 1920
+          take_frame: 5
+          fps: 24
+          snapshots:
+            show_timestamp: false
+
+        utility_entrance:
+          ffmpeg:
+            input: rtsp://192.168.0.1:7447/4HGg2c1YLJSwtsNW
+          height: 1080
+          width: 1920
+          take_frame: 5
+          fps: 24
+          snapshots:
+            show_timestamp: false
+
+        frontyard_garage:
+          ffmpeg:
+            input: rtsp://192.168.0.1:7447/cVT8xcvPAE1o0Rt4
+          height: 1080
+          width: 1920
+          take_frame: 5
+          fps: 24
+          snapshots:
+            show_timestamp: false
+
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - {key: "feature.node.kubernetes.io/custom-coral-tpu", operator: In, values: ["true"]}
+    resources:
+      requests:
+        memory: 1000Mi
+        cpu: 750m
+      limits:
+        memory: 2500Mi
+
+  valuesFrom:
+    - kind: Secret
+      name: "frigate-mqtt-secrets"
+      valuesKey: values.yaml
+      optional: false

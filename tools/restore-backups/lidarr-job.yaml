@@ -1,0 +1,46 @@
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: restore-lidarr
+  namespace: media
+spec:
+  template:
+    spec:
+      containers:
+        - name: restore-lidarr
+          image: registry.komhem.xyz/docker/k8s-volume-backup:1.0.3
+          imagePullPolicy: Always
+          args:
+            - /bin/sh
+            - /restore.sh
+          env:
+            - name: RESTORE_FILE
+              # Update the following value with the filename of the backup you want to restore
+              value: "**REPLACE-ME**"
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-credentials
+                  key: MINIO_ACCESS_KEY
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-credentials
+                  key: MINIO_SECRET_KEY
+            - name: MINIO_ENDPOINT
+              value: "192.168.20.2:9000"
+            - name: MINIO_BUCKET
+              value: "backup/lidarr"
+            - name: LOCAL_PATH
+              value: "/config"
+          volumeMounts:
+            - name: lidarr-storage
+              mountPath: /config
+      volumes:
+        - name: lidarr-storage
+          persistentVolumeClaim:
+            claimName: lidarr-config
+      restartPolicy: Never
+  backoffLimit: 4

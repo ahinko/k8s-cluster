@@ -1,0 +1,79 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-server
+  namespace: home-automation
+  labels:
+    app: code-server
+spec:
+  selector:
+    matchLabels:
+      app: code-server
+      tier: code-server
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: code-server
+        tier: code-server
+    spec:
+      containers:
+        - image: registry.komhem.xyz/docker/code-server:1.0.2
+          name: code-server
+          env:
+            - name: TZ
+              value: "Europe/Stockholm"
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: code-server-credentials
+                  key: password
+          ports:
+            - containerPort: 8080
+              name: code-server
+          resources:
+            requests:
+              memory: "1024Mi"
+              cpu: "1"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: code-server
+            initialDelaySeconds: 20
+            failureThreshold: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: code-server
+            initialDelaySeconds: 20
+            failureThreshold: 3
+            timeoutSeconds: 5
+          volumeMounts:
+            - name: hass-persistent-storage
+              mountPath: /hass
+            - name: zigbee2mqtt-persistent-storage
+              mountPath: /zigbee
+            - name: zwave2mqtt-persistent-storage
+              mountPath: /zwave
+            - name: nodered-persistent-storage
+              mountPath: /nodered
+      volumes:
+        - name: hass-persistent-storage
+          persistentVolumeClaim:
+            claimName: home-assistant-config
+        - name: zigbee2mqtt-persistent-storage
+          persistentVolumeClaim:
+            claimName: zigbee2mqtt-data
+        - name: zwave2mqtt-persistent-storage
+          persistentVolumeClaim:
+            claimName: zwave2mqtt-config
+        - name: nodered-persistent-storage
+          persistentVolumeClaim:
+            claimName: node-red-data
