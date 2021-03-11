@@ -27,6 +27,9 @@ spec:
       repository: "pihole/pihole"
       tag: v5.5.1
 
+    podAnnotations:
+      secret.reloader.stakater.com/reload: "pihole-password"
+
     serviceDns:
       type: LoadBalancer
       loadBalancerIP: 192.168.20.205
