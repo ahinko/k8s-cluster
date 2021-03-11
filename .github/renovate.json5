@@ -162,12 +162,10 @@
                 "minio/minio"
             ]
         },
-            "matchDatasources": [
-                "loose"
-            ],
-            "matchPackageNames": [
-                "pihole/pihole"
-            ]
+        {
+            "matchDatasources": ["docker"],
+            "versioning": "loose",
+            "matchPackageNames": ["pihole/pihole"]
         }
     ]
 }
