@@ -44,13 +44,10 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "internal"
       hosts:
-        - host: pihole.komhem.xyz
-          paths:
-            - path: /
-              pathType: Prefix
+        - pihole.komhem.xyz
       tls:
         - hosts:
-            - "pihole.komhem.xyz"
+            - pihole.komhem.xyz
 
     resources:
       requests:
