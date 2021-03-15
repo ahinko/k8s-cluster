@@ -19,13 +19,18 @@
   tasks:
     - name: drain node {{ inventory_hostname }}
       ansible.builtin.command: kubectl drain --ignore-daemonsets --force --delete-emptydir-data {{ inventory_hostname }}
+      delegate_to: localhost
+      become: false
 
     - name: kill k3s on {{ inventory_hostname }}
       ansible.builtin.command: /usr/local/bin/k3s-killall.sh
-      delegate_to: localhost
 
     - name: reboot {{ inventory_hostname }}
       reboot:
+
+    - name: pause for 30 seconds before uncordon
+      pause:
+        seconds: 30
 
     - name: uncordon {{ inventory_hostname }}
       become: false

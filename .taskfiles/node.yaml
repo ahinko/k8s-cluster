@@ -19,7 +19,7 @@ tasks:
     silent: true
     preconditions:
       - sh: "[ '{{.NODE}}' != '<no value>' ]"
-        msg: "Variable .NODE is not set. Usage: NODE=node-name task reboot:node"
+        msg: "Variable .NODE is not set. Usage: NODE=node-name task node:reboot"
 
   clean:
     desc: Remove unused containerd images
