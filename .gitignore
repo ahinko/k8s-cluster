@@ -1,1 +1,2 @@
 bootstrap/consul/*.tgz
+.env
