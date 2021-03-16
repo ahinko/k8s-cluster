@@ -1,0 +1,16 @@
+---
+
+version: '3.8'
+
+services:
+  nfs:
+    container_name: nfs-server
+    image: itsthenetwork/nfs-server-alpine:12
+    restart: always
+    privileged: true
+    ports:
+      - 2049:2049
+    environment:
+      - SHARED_DIRECTORY=/data
+    volumes:
+      - /pool/media:/data

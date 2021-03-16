@@ -1,0 +1,23 @@
+---
+
+version: '3.8'
+
+services:
+  minio:
+    container_name: minio
+    image: minio/minio:RELEASE.2021-03-12T00-00-47Z
+    restart: always
+    ports:
+      - 9000:9000
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+    volumes:
+      - /tank/kubernetes/volumes/minio:/data
+      - /tank/kubernetes/volumes/minio-conf:/root/.minio
+    command: server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-k", "https://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
