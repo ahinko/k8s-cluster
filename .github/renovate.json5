@@ -166,7 +166,7 @@
             "matchDatasources": [
                 "docker"
             ],
-            "versioning": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-web",
+            "versioning": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-omnibus",
             "matchPackageNames": [
                 "analogj/scrutiny"
             ]
