@@ -1,0 +1,29 @@
+---
+
+version: '3.8'
+
+services:
+  scrutiny:
+    container_name: scrutiny
+    image: analogj/scrutiny:v0.3.5-web
+    restart: always
+    ports:
+      - 8080:8080
+    cap_add:
+      - SYS_RAWIO
+    volumes:
+      - /lib/udev:/run/udev:ro
+      - /tank/kubernetes/volumes/scrutiny:/scrutiny/config
+    devices:
+      - "/dev/sda"
+      - "/dev/sdb"
+      - "/dev/sdc"
+      - "/dev/sdd"
+      - "/dev/sde"
+      - "/dev/sdf"
+      - "/dev/sdg"
+      - "/dev/sdh"
+      - "/dev/sdi"
+      - "/dev/sdj"
+      - "/dev/sdk"
+      - "/dev/sdl"
