@@ -44,10 +44,14 @@ spec:
     additionalVolumeMounts:
       - name: media-atlas
         mountPath: "/media"
+      - name: tempdl
+        mountPath: "/downloads"
     additionalVolumes:
       - name: media-atlas
         persistentVolumeClaim:
           claimName: nfs-atlas-media-pvc
+      - name: tempdl
+        emptyDir: {}
     resources:
       requests:
         memory: 250Mi
