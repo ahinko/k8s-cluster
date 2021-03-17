@@ -38,13 +38,13 @@
         },
         // regexManager to read and process actions-runner-controller runner images
         {
-            "fileMatch": [
-                "cluster/actions-runner-system/runners/.+\\.yaml$"
-            ],
-            "matchStrings": [
-                "image: (?<depName>.*?):(?<currentValue>.*?)\n"
-            ],
-            "datasourceTemplate": "docker"
+        "fileMatch": [
+            "cluster/actions-runner-system/runners/.+\\.yaml$"
+        ],
+        "matchStrings": [
+            "image: (?<depName>.*?):(?<currentValue>.*?)\n"
+        ],
+        "datasourceTemplate": "docker"
         }
     ],
     "packageRules": [
@@ -157,9 +157,18 @@
             "matchDatasources": [
                 "docker"
             ],
-            "versioning": "regex:^v(?<major>\d+)\.(?<minor>\d+)\.?(?<patch>\d+)?$",
+            "versioning": "regex:^RELEASE\\.(?<major>\\d{4})-(?<minor>\\d{2})-(?<patch>\\d{2})",
             "matchPackageNames": [
                 "minio/minio"
+            ]
+        },
+        {
+            "matchDatasources": [
+                "docker"
+            ],
+            "versioning": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-web",
+            "matchPackageNames": [
+                "analogj/scrutiny"
             ]
         },
         {
