@@ -24,7 +24,7 @@ spec:
               key: registry_password
               name: docker-registry-credentials
         - name: REGISTRY_URL
-          value: "registry.komhem.xyz"
+          value: "docker-registry.komhem.xyz"
 
       resources:
         limits:
