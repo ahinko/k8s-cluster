@@ -24,7 +24,7 @@ spec:
         tier: code-server
     spec:
       containers:
-        - image: registry.komhem.xyz/docker/code-server:1.0.2
+        - image: registry.komhem.xyz/docker/code-server:1.0.4
           name: code-server
           env:
             - name: TZ
