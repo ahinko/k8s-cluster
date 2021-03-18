@@ -5,17 +5,20 @@ mirrors:
   docker.io:
     endpoint:
       - {{ mirror_registry.address }}
-  "*":
-    endpoint:
-      - {{ mirror_registry.address }}
+      - docker.io
 {% endif %}
 
-{% if private_registries is defined and private_registries|length > 0 %}
+{% if private_registry is defined %}
 configs:
-{% for private_registry in private_registries %}
   {{ private_registry.address }}:
     auth:
       username: {{ private_registry.username }}
       password: {{ private_registry.password }}
-{% endfor %}
+{% endif %}
+
+{% if mirror_registry is defined %}
+  {{ mirror_registry.address }}:
+    auth:
+      username: {{ mirror_registry.username }}
+      password: {{ mirror_registry.password }}
 {% endif %}

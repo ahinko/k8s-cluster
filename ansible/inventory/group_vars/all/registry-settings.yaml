@@ -1,11 +1,13 @@
 ---
 
 # Configure a registry mirror, useful for having a pull-through cache
-# mirror_registry:
-  # address: "registry-cache.komhem.xyz"
+mirror_registry:
+  address: "docker-proxy.komhem.xyz"
+  username: "user"
+  password: "password"
 
 # Configure private registries
-private_registries:
-- address: "registry.komhem.xyz"
-  username: "admin"
+private_registry:
+  address: "registry.komhem.xyz"
+  username: "user"
   password: "password"
