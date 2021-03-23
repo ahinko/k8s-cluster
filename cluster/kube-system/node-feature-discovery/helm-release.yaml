@@ -30,7 +30,6 @@ spec:
             - custom
             - pci
             - usb
-
         sources:
           usb:
             deviceClassWhitelist:
