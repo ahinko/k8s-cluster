@@ -27,7 +27,7 @@ spec:
     worker:
       config: |-
         core:
-          sources:
+            sources:
             - "custom"
             - "pci"
             - "usb"
