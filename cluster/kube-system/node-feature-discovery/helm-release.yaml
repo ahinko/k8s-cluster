@@ -28,9 +28,9 @@ spec:
       config: |-
         core:
           sources:
-            - custom
-            - pci
-            - usb
+            - "custom"
+            - "pci"
+            - "usb"
         sources:
           usb:
             deviceClassWhitelist:
