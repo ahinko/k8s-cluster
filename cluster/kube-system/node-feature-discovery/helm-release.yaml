@@ -23,9 +23,6 @@ spec:
       repository: k8s.gcr.io/nfd/node-feature-discovery
       tag: v0.8.0
 
-
-    master:
-
     worker:
       config: |-
         core:
