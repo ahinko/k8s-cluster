@@ -70,7 +70,7 @@ spec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - {key: "feature.node.kubernetes.io/custom-zigbee", operator: In, values: ["true"]}
+                - {key: "feature.node.kubernetes.io/usb-02_0451_16a8", operator: In, values: ["true"]}
 
     resources:
       requests:
