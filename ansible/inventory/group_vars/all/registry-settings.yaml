@@ -3,7 +3,7 @@
 # Configure a registry mirror, useful for having a pull-through cache
 mirror_registry:
   address: "docker-proxy.komhem.xyz"
-  ip: "192.168.20.2.5001"
+  ip: "192.168.20.2:5001"
   username: "user"
   password: "password"
 
