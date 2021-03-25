@@ -1,15 +1,15 @@
 ---
 
 # Configure a registry mirror, useful for having a pull-through cache
-mirror_registry:
-  address: "docker-proxy.komhem.xyz"
-  ip: "192.168.20.2:5001"
-  username: "user"
-  password: "password"
+#mirror_registry:
+  #address: "docker-proxy.komhem.xyz"
+  #ip: "192.168.20.2:5001"
+  #username: "user"
+  #password: "password"
 
 # Configure private registries
 private_registry:
   address: "registry.komhem.xyz"
   ip: "192.168.20.2:5002"
-  username: "user"
-  password: "password"
+  username: "docker-user"
+  password: "bugh6fluk_shex!SAUC"
