@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "This does not work, sorry"
+exit
+
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 NOCOLOR="\033[0m"
@@ -33,7 +36,6 @@ else
 fi
 
 echo -e "\n${BOLD}Set up Calico${NORMAL}"
-kubectl apply -f cluster/tigera-operator/namespace.yaml
 kubectl apply -f cluster/tigera-operator/operator/tigera-operator-crds.yaml
 kubectl apply -f cluster/tigera-operator/resources/custom-resources.yaml
 
@@ -101,6 +103,7 @@ kubectl apply -f cluster/media/sonarr-uhd/persistent-volume-claim.yaml
 echo -e "\n${BOLD}Deploying resources that needs to exist in the cluster before Flux can run.${NORMAL}"
 kubectl apply -f cluster/cert-manager/cert-manager/crds.yaml
 kubectl apply -f cluster/vault/secrets-operator/crds.yaml
+kubectl apply -f cluster/system-upgrade/namespace.yaml
 kubectl apply -f cluster/system-upgrade/system-upgrade-controller/deployment.yaml
 
 echo -e "\n${BOLD}Bootstrapping Flux.${NORMAL}"
