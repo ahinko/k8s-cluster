@@ -1,0 +1,51 @@
+---
+
+- hosts:
+    - all
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+
+  vars_prompt:
+    - name: "run_confirmation"
+      prompt: "Are you sure you want to nuke rook ceph from all nodes? [Y/n]"
+      default: "n"
+      private: false
+
+  pre_tasks:
+    - name: check confirmation
+      fail:
+        msg: "Abort."
+      when: run_confirmation != "Y"
+
+  tasks:
+    - name: drain node {{ inventory_hostname }}
+      ansible.builtin.command: kubectl drain --ignore-daemonsets --force --delete-emptydir-data {{ inventory_hostname }}
+      delegate_to: localhost
+      become: false
+
+    - name: uninstall k3s
+      ansible.builtin.command: /usr/local/bin/k3s-uninstall.sh
+
+    - name: remove k8s directories
+      ansible.builtin.file:
+        state: absent
+        path: "{{ item }}"
+      with_items:
+        - /etc/ceph
+        - /etc/cni
+        - /etc/kubernetes
+        - /opt/cni
+        - /opt/rke
+        - /run/secrets/kubernetes.io
+        - /run/calico
+        - /run/flannel
+        - /var/lib/calico
+        - /var/lib/etcd
+        - /var/lib/cni
+        - /var/lib/kubelet
+        - /var/lib/rancher/rke/log
+        - /var/log/containers
+        - /var/log/kube-audit
+        - /var/log/pods
+        - /var/run/calico
