@@ -1,23 +1,29 @@
 ---
 
-{% if mirror_registry is defined %}
 mirrors:
+{% if private_registry is defined %}
+  {{ private_registry.address }}:
+    endpoint:
+      - "http://{{ private_registry.ip }}"
+{% endif %}
+
+{% if mirror_registry is defined %}
   docker.io:
     endpoint:
-      - {{ mirror_registry.address }}
+      - "http://{{ mirror_registry.ip }}"
       - docker.io
 {% endif %}
 
-{% if private_registry is defined %}
 configs:
-  {{ private_registry.address }}:
+{% if private_registry is defined %}
+  "{{ private_registry.ip }}":
     auth:
       username: {{ private_registry.username }}
       password: {{ private_registry.password }}
 {% endif %}
 
 {% if mirror_registry is defined %}
-  {{ mirror_registry.address }}:
+  "{{ mirror_registry.ip }}":
     auth:
       username: {{ mirror_registry.username }}
       password: {{ mirror_registry.password }}
