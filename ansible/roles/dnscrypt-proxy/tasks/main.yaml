@@ -1,5 +1,5 @@
 ---
 
-#- include: systemd-resolv.yaml
+- include: systemd-resolv.yaml
 - include: dnscrypt-proxy.yaml
 - include: resolv.yaml
