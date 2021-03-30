@@ -1,0 +1,62 @@
+---
+
+# - name: Add dnscrypt-proxy ppa
+#   ansible.builtin.apt_repository:
+#     repo: ppa:shevchuk/dnscrypt-proxy
+#     state: present
+#     update_cache: yes
+
+# - name: Ensure dnscrypt-proxy is installed
+#   apt:
+#     name: dnscrypt-proxy
+#     state: present
+#     update_cache: true
+#     cache_valid_time: 3600
+
+# - name: Ensure config is set
+#   template:
+#     src: dnscrypt-proxy.toml.j2
+#     dest: /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+#     owner: root
+#     group: root
+#     mode: 0644
+
+# - name: Ensure cloaking rules is set
+#   template:
+#     src: templates/cloaking-rules.txt.j2
+#     dest: /etc/dnscrypt-proxy/cloaking-rules.txt
+#     owner: root
+#     group: root
+#     mode: 0644
+
+- name: Disable wrong dnscrypt proxy service
+  ansible.builtin.service:
+    name: dnscrypt-proxy.service
+    state: stopped
+    enabled: no
+    masked: no
+
+- name: Disable wrong dnscrypt proxy service
+  ansible.builtin.service:
+    name: dnscrypt-proxy.socket
+    state: stopped
+    enabled: no
+    masked: no
+
+- name: Remove wrong dnscrypt proxy service
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /lib/systemd/system/dnscrypt-proxy.service
+    - /lib/systemd/system/dnscrypt-proxy.socket
+
+- name: Install new dnscrypt proxy service
+  ansible.builtin.command: dnscrypt-proxy -config /etc/dnscrypt-proxy/dnscrypt-proxy.toml -service install
+  ignore_errors: True
+
+- name: Restart dnscrypt proxy
+  ansible.builtin.service:
+    name: dnscrypt-proxy
+    daemon-reload: yes
+    state: restarted

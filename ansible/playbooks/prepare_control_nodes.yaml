@@ -8,7 +8,7 @@
       prompt: "Are you sure you want to run this over the control plane nodes? [Y/n]"
       default: "n"
       private: false
-  any_errors_fatal: true
+  any_errors_fatal: false
   pre_tasks:
     - name: check confirmation
       fail:
@@ -17,6 +17,7 @@
   roles:
     - {role: keepalived}
     - {role: haproxy}
+    - {role: dnscrypt-proxy}
   tasks:
     - name: Ensure nfs-common is installed
       apt:

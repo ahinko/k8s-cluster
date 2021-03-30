@@ -1,0 +1,27 @@
+---
+
+dns_nameservers:
+  - 192.168.20.5
+  - 192.168.20.6
+  - 192.168.20.7
+
+dnscrypt_proxy_listen_address: "0.0.0.0:53"
+dnscrypt_proxy_servers: "cloudflare"
+
+dnscrypt_proxy_cloaking_rules:
+  - domain: "sabnzbd.komhem.xyz"
+    ip: "192.168.20.211"
+  - domain: "sonarr.komhem.xyz"
+    ip: "192.168.20.211"
+  - domain: "sonarr-uhd.komhem.xyz"
+    ip: "192.168.20.211"
+  - domain: "radarr.komhem.xyz"
+    ip: "192.168.20.211"
+  - domain: "lidarr.komhem.xyz"
+    ip: "192.168.20.211"
+  - domain: "hass.komhem.xyz"
+    ip: "192.168.20.211"
+  - domain: "next.komhem.xyz"
+    ip: "192.168.20.211"
+  - domain: "*.komhem.xyz"
+    ip: "192.168.20.210"

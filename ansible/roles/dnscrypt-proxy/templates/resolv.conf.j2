@@ -1,0 +1,5 @@
+{% for item in dns_nameservers %}
+nameserver {{ item }}
+{% endfor %}
+
+search default

@@ -1,0 +1,3 @@
+{% for rule in dnscrypt_proxy_cloaking_rules %}
+{{ rule.domain }} {{ rule.ip }}
+{% endfor %}
