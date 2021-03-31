@@ -1,0 +1,97 @@
+---
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: pihole
+  namespace: network
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://mojo2600.github.io/pihole-kubernetes/
+      chart: pihole
+      version: 1.8.30
+      sourceRef:
+        kind: HelmRepository
+        name: mojo2600-pihole
+        namespace: flux-system
+      interval: 5m
+  values:
+    replicaCount: 1
+
+    maxSurge: 1
+    maxUnavailable: 0
+
+    image:
+      repository: "pihole/pihole"
+      tag: v5.7
+
+    podAnnotations:
+      secret.reloader.stakater.com/reload: "pihole-password"
+
+    serviceDns:
+      type: LoadBalancer
+      loadBalancerIP: 192.168.20.205
+      annotations:
+        metallb.universe.tf/allow-shared-ip: pihole-svc
+
+    serviceWeb:
+      type: LoadBalancer
+      loadBalancerIP: 192.168.20.205
+      annotations:
+        metallb.universe.tf/allow-shared-ip: pihole-svc
+
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "internal"
+      hosts:
+        - pihole.komhem.xyz
+      tls:
+        - hosts:
+            - pihole.komhem.xyz
+
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "100m"
+      limits:
+        memory: "256Mi"
+        cpu: "250m"
+
+    persistentVolumeClaim:
+      # set to true to use pvc
+      enabled: true
+      # set to true to use you own pvc
+      existingClaim: pihole-data
+
+    # Use an existing secret for the admin password.
+    admin:
+      existingSecret: "pihole-password"
+      passwordKey: "password"
+
+    # extraEnvironmentVars is a list of extra enviroment variables to set for pihole to use
+    extraEnvVars:
+      TZ: Europe/Stockholm
+
+    # default upstream DNS servers to use
+    DNS1: "192.168.20.5"
+    DNS2: "192.168.20.7"
+
+    monitoring:
+      podMonitor:
+        enabled: false
+      sidecar:
+        enabled: false
+        port: 9617
+        image:
+          repository: ekofr/pihole-exporter
+          tag: v0.0.11
+          pullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
