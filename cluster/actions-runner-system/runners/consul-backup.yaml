@@ -34,13 +34,6 @@ spec:
           cpu: "0.5"
           memory: "0.5Gi"
 
-      volumeMounts:
-        - mountPath: /runner
-          name: runner
-      volumes:
-        - emptyDir: {}
-          name: runner
-
       # Valid if dockerdWithinRunnerContainer is not true
       dockerdContainerResources:
         limits:
