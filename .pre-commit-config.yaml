@@ -42,3 +42,11 @@ repos:
       - id: ansible-lint
         files: ^ansible
         entry: env ANSIBLE_CONFIG=./ansible/ansible.cfg ansible-lint --force-color -v -c .github/ansible-lint.yaml
+  - repo: https://github.com/IamTheFij/docker-pre-commit.git
+    rev: v2.0.0
+    hooks:
+      - id: docker-compose-check
+      - id: hadolint
+        args:
+          - --config
+          - ".github/hadolint.yaml"
