@@ -47,7 +47,7 @@ spec:
               pathType: Prefix
       tls:
         - hosts:
-            - "zigbee.komehm.xyz"
+            - "zigbee.komhem.xyz"
 
     securityContext:
       privileged: true

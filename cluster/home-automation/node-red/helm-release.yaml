@@ -49,7 +49,7 @@ spec:
               pathType: Prefix
       tls:
         - hosts:
-            - "node-red.komehm.xyz"
+            - "node-red.komhem.xyz"
 
     persistence:
       data:

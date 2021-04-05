@@ -48,7 +48,7 @@ spec:
               pathType: Prefix
       tls:
         - hosts:
-            - "hass.komehm.xyz"
+            - "hass.komhem.xyz"
 
     prometheus:
       serviceMonitor:
