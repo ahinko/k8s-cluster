@@ -39,6 +39,9 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "internal"
+        forecastle.stakater.com/expose: "true"
+        forecastle.stakater.com/icon: "https://nodered.org/about/resources/media/node-red-hexagon.svg"
+        forecastle.stakater.com/network-restricted: "true"
       hosts:
         - host: node-red.komhem.xyz
           paths:

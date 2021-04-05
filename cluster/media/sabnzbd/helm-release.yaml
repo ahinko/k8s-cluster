@@ -28,6 +28,9 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "external"
+        forecastle.stakater.com/expose: "true"
+        forecastle.stakater.com/icon: "https://github.com/sabnzbd/sabnzbd/blob/develop/icons/logo-arrow.svg?raw=true"
+        forecastle.stakater.com/network-restricted: "true"
       hosts:
         - host: sabnzbd.komhem.xyz
           paths:

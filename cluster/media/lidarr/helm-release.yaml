@@ -28,6 +28,9 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "external"
+        forecastle.stakater.com/expose: "true"
+        forecastle.stakater.com/icon: "https://github.com/lidarr/Lidarr/blob/develop/Logo/128.png?raw=true"
+        forecastle.stakater.com/network-restricted: "true"
       hosts:
         - host: lidarr.komhem.xyz
           paths:
