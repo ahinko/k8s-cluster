@@ -32,8 +32,7 @@ spec:
         hosts:
           - host: dash.komhem.xyz
             paths:
-              - path: /
-                pathType: Prefix
+              - /
         tls:
           - hosts:
               - dash.komhem.xyz
