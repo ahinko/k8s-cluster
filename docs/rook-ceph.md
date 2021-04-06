@@ -9,6 +9,11 @@ Get admin password:
 $ kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath="{['data']['password']}" | base64 --decode && echo
 ```
 
+Once the admin user was never created. So we created it manually using this command:
+```shell
+$ ceph dashboard ac-user-create admin -i /tmp/pwd.txt administrator
+```
+
 ## Troubleshooting
 
 On occation we got in a state where the filesystem was degraded but everything else seems to be working fine. No errors no error logs.
