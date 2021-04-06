@@ -46,6 +46,9 @@ spec:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "internal"
+        forecastle.stakater.com/expose: "true"
+        forecastle.stakater.com/icon: "https://camo.githubusercontent.com/9426a93d32aa9f5ad757b2befcdb762a270d344efd6b8d287a2cea2c4c2233b8/68747470733a2f2f70692d686f6c652e6769746875622e696f2f67726170686963732f566f727465782f566f727465785f776974685f576f72646d61726b2e737667"
+        forecastle.stakater.com/network-restricted: "true"
       hosts:
         - pihole.komhem.xyz
       tls:

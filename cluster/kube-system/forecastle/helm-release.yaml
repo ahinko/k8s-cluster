@@ -23,8 +23,11 @@ spec:
         title: "Apps"
         namespaceSelector:
           matchNames:
-            - media
             - home-automation
+            - media
+            - network
+            - rook-ceph
+            - vault
       ingress:
         enabled: true
         annotations:
