@@ -34,7 +34,7 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "internal"
         forecastle.stakater.com/expose: "true"
-        forecastle.stakater.com/icon: "https://github.com/home-assistant/assets/blob/master/logo/logo.svg?raw=true"
+        forecastle.stakater.com/icon: "https://en.wikipedia.org/wiki/Z-Wave#/media/File:Z-Wave_logo.jpg"
         forecastle.stakater.com/network-restricted: "true"
       hosts:
         - host: zwave.komhem.xyz
