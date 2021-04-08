@@ -207,7 +207,7 @@ spec:
             # Optional: Number of seconds after the event to include in the clips (default: shown below)
             post_capture: 5
             # Optional: Restrict clips to objects that entered any of the listed zones (default: no required zones)
-            required_zones: []
+            # required_zones: []
             # Optional: Camera override for retention settings (default: global values)
             retain:
               # Required: Default retention days (default: shown below)
@@ -273,7 +273,7 @@ spec:
             enabled: True
             pre_capture: 5
             post_capture: 5
-            required_zones: []
+            # required_zones: []
             retain:
               default: 10
 
@@ -318,7 +318,7 @@ spec:
             enabled: True
             pre_capture: 5
             post_capture: 5
-            required_zones: []
+            # required_zones: []
             retain:
               default: 10
 
@@ -363,7 +363,7 @@ spec:
             enabled: True
             pre_capture: 5
             post_capture: 5
-            required_zones: []
+            # required_zones: []
             retain:
               default: 10
 
@@ -408,7 +408,7 @@ spec:
             enabled: True
             pre_capture: 5
             post_capture: 5
-            required_zones: []
+            # required_zones: []
             retain:
               default: 10
 
@@ -453,7 +453,7 @@ spec:
             enabled: True
             pre_capture: 5
             post_capture: 5
-            required_zones: []
+            # required_zones: []
             retain:
               default: 10
 
