@@ -131,7 +131,7 @@ spec:
 
         output_args:
           # Optional: output args for detect streams (default: shown below)
-          detect: -f rawvideo -pix_fmt yuv420p fps=fps=5
+          detect: -f rawvideo -pix_fmt yuv420p -vf fps=fps=5
 
       objects:
         track:
