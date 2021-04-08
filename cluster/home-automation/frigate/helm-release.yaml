@@ -1,4 +1,5 @@
 ---
+
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -8,22 +9,49 @@ spec:
   interval: 5m
   chart:
     spec:
-      # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: frigate
-      version: 4.0.1
+      version: 5.0.1
       sourceRef:
         kind: HelmRepository
-        name: k8s-at-home-charts
+        name: frigate-charts
         namespace: flux-system
       interval: 5m
+
+  valuesFrom:
+    - kind: Secret
+      name: "frigate-mqtt-secrets"
+      valuesKey: values.yaml
+      optional: false
+
   values:
+    replicaCount: 1
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 2
+        maxUnavailable: 0
+
     image:
       repository: blakeblackshear/frigate
-      tag: 0.5.2
+      tag: 0.8.0-amd64
+      pullPolicy: IfNotPresent
+
     podAnnotations:
       configmap.reloader.stakater.com/reload: "frigate"
       secret.reloader.stakater.com/reload: "frigate-mqtt-secrets"
+
     timezone: Europe/Stockholm
+
+    coral:
+      enabled: true
+      hostPath: /dev/bus/usb
+
+    # Specify image that generates the config folder containing the Frigate config file, masks (if specified), etc.
+    initContainer:
+      image:
+        repository: busybox
+        tag: latest
+        pullPolicy: Always
 
     ingress:
       enabled: true
@@ -35,100 +63,415 @@ spec:
         - hosts:
             - "frigate.komhem.xyz"
 
-    coral:
-      enabled: true
+    persistence:
+      data:
+        enabled: true
+        existingClaim: frigate-config
+        mountPath: /data
 
-    config: |
-      mqtt:
-        host: mosquitto
-        topic_prefix: frigate
+    extraVolumeMounts:
+      - mountPath: /media
+        name: frigate-media
+      - mountPath: /tmp/cache
+        name: cache
 
-      objects:
-        track:
-          - person
-        filters:
-          person:
-            min_area: 5000
-            max_area: 100000
-            threshold: 0.90
-
-      cameras:
-        frontyard_terrace:
-          ffmpeg:
-            input: rtsp://192.168.0.1:7447/7VhaBZxtCpKFV54H
-          height: 1080
-          width: 1920
-          take_frame: 5
-          fps: 24
-          snapshots:
-            show_timestamp: false
-
-        backyard_livingroom:
-          ffmpeg:
-            input: rtsp://192.168.0.1:7447/k8xv9uFTcVuVz4Pi
-          height: 1080
-          width: 1920
-          take_frame: 5
-          fps: 24
-          snapshots:
-            show_timestamp: false
-
-        backyard_terrace:
-          ffmpeg:
-            input: rtsp://192.168.0.1:7447/UCfkcmaIYCQanbjj
-          height: 1080
-          width: 1920
-          take_frame: 5
-          fps: 24
-          snapshots:
-            show_timestamp: false
-
-        east_side:
-          ffmpeg:
-            input: rtsp://192.168.0.1:7447/bD35LvIY0mVXDGAV
-          height: 1080
-          width: 1920
-          take_frame: 5
-          fps: 24
-          snapshots:
-            show_timestamp: false
-
-        utility_entrance:
-          ffmpeg:
-            input: rtsp://192.168.0.1:7447/4HGg2c1YLJSwtsNW
-          height: 1080
-          width: 1920
-          take_frame: 5
-          fps: 24
-          snapshots:
-            show_timestamp: false
-
-        frontyard_garage:
-          ffmpeg:
-            input: rtsp://192.168.0.1:7447/cVT8xcvPAE1o0Rt4
-          height: 1080
-          width: 1920
-          take_frame: 5
-          fps: 24
-          snapshots:
-            show_timestamp: false
+    extraVolumes:
+      - name: frigate-media
+        persistentVolumeClaim:
+          claimName: frigate-media
+      - name: cache
+        emptyDir:
+          medium: Memory
 
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - {key: "feature.node.kubernetes.io/usb-ff_18d1_9302.present", operator: In, values: ["true"]}
+                - key: feature.node.kubernetes.io/custom-coral-tpu
+                  operator: In
+                  values:
+                    - "true"
+                - key: feature.node.kubernetes.io/custom-intel-gpu
+                  operator: In
+                  values:
+                    - "true"
 
     resources:
       requests:
         memory: 1000Mi
         cpu: 750m
+        gpu.intel.com/i915: 1
       limits:
         memory: 2500Mi
+        gpu.intel.com/i915: 1
 
-  valuesFrom:
-    - kind: Secret
-      name: "frigate-mqtt-secrets"
-      valuesKey: values.yaml
-      optional: false
+    config: |
+      mqtt: mosquitto
+
+      logger:
+        # Optional: default log level (default: shown below)
+        # Available log levels are: debug, info, warning, error, critical
+        default: error
+
+      detectors:
+        coral:
+          type: edgetpu
+          device: usb
+
+      ffmpeg:
+        hwaccel_args:
+          - -hwaccel
+          - vaapi
+          - -hwaccel_device
+          - /dev/dri/renderD128
+          - -hwaccel_output_format
+          - yuv420p
+
+        output_args:
+          # Optional: output args for detect streams (default: shown below)
+          detect: -f rawvideo -pix_fmt yuv420p fps=fps=5
+
+      objects:
+        track:
+          - person
+          - bicycle
+          - bus
+          - car
+          - bird
+          - cat
+          - dog
+          - horse
+          - sheep
+          - cow
+          - elephant
+          - bear
+          - zebra
+          - giraffe
+        filters:
+          person:
+            # Optional: minimum width*height of the bounding box for the detected object (default: 0)
+            min_area: 5000
+            # Optional: maximum width*height of the bounding box for the detected object (default: 24000000)
+            max_area: 100000
+            # Optional: minimum score for the object to initiate tracking (default: shown below)
+            min_score: 0.5
+            # Optional: minimum decimal percentage for tracked object's computed score to be considered a true positive (default: shown below)
+            threshold: 0.7
+
+      cameras:
+        # Required: name of the camera
+        frontyard_terrace:
+          # Required: ffmpeg settings for the camera
+          ffmpeg:
+            # Required: A list of input streams for the camera. See documentation for more information.
+            inputs:
+              # Required: the path to the stream
+              # NOTE: Environment variables that begin with 'FRIGATE_' may be referenced in {}
+              - path: rtsp://192.168.0.1:7447/7VhaBZxtCpKFV54H
+                # Required: list of roles for this stream. valid values are: detect,record,clips,rtmp
+                # NOTICE: In addition to assigning the record, clips, and rtmp roles,
+                # they must also be enabled in the camera config.
+                roles:
+                  - detect
+                  - clips
+          # Required: width of the frame for the input with the detect role
+          width: 1920
+          # Required: height of the frame for the input with the detect role
+          height: 1080
+          # Optional: desired fps for your camera for the input with the detect role
+          # NOTE: Recommended value of 5. Ideally, try and reduce your FPS on the camera.
+          #       Frigate will attempt to autodetect if not specified.
+          fps: 5
+
+          # Optional: timeout for highest scoring image before allowing it
+          # to be replaced by a newer image. (default: shown below)
+          best_image_timeout: 10
+
+          # Optional: Camera level detect settings
+          detect:
+            # Optional: enables detection for the camera (default: True)
+            # This value can be set via MQTT and will be updated in startup based on retained value
+            enabled: True
+            # Optional: Number of frames without a detection before frigate considers an object to be gone. (default: 5x the frame rate)
+            max_disappeared: 25
+
+          # Optional: save clips configuration
+          clips:
+            # Required: enables clips for the camera (default: shown below)
+            # This value can be set via MQTT and will be updated in startup based on retained value
+            enabled: True
+            # Optional: Number of seconds before the event to include in the clips (default: shown below)
+            pre_capture: 5
+            # Optional: Number of seconds after the event to include in the clips (default: shown below)
+            post_capture: 5
+            # Optional: Restrict clips to objects that entered any of the listed zones (default: no required zones)
+            required_zones: []
+            # Optional: Camera override for retention settings (default: global values)
+            retain:
+              # Required: Default retention days (default: shown below)
+              default: 10
+
+          # Optional: 24/7 recording configuration
+          record:
+            # Optional: Enable recording (default: global setting)
+            enabled: False
+
+          # Optional: RTMP re-stream configuration
+          rtmp:
+            # Required: Enable the live stream (default: True)
+            enabled: False
+
+          # Optional: Configuration for the jpg snapshots written to the clips directory for each event
+          snapshots:
+            # Optional: Enable writing jpg snapshot to /media/frigate/clips (default: shown below)
+            # This value can be set via MQTT and will be updated in startup based on retained value
+            enabled: True
+            # Optional: print a timestamp on the snapshots (default: shown below)
+            timestamp: False
+            # Optional: draw bounding box on the snapshots (default: shown below)
+            bounding_box: True
+            # Optional: crop the snapshot (default: shown below)
+            crop: False
+            # Optional: Camera override for retention settings (default: global values)
+            retain:
+              # Required: Default retention days (default: shown below)
+              default: 10
+
+          # Optional: Configuration for the jpg snapshots published via MQTT
+          mqtt:
+            # Optional: Enable publishing snapshot via mqtt for camera (default: shown below)
+            # NOTE: Only applies to publishing image data to MQTT via 'frigate/<camera_name>/<object_name>/snapshot'.
+            # All other messages will still be published.
+            enabled: True
+            # Optional: print a timestamp on the snapshots (default: shown below)
+            timestamp: False
+            # Optional: draw bounding box on the snapshots (default: shown below)
+            bounding_box: True
+            # Optional: crop the snapshot (default: shown below)
+            crop: False
+
+        backyard_livingroom:
+          ffmpeg:
+            inputs:
+              - path: rtsp://192.168.0.1:7447/k8xv9uFTcVuVz4Pi
+                roles:
+                  - detect
+                  - clips
+          width: 1920
+          height: 1080
+          fps: 5
+
+          best_image_timeout: 10
+
+          detect:
+            enabled: True
+            max_disappeared: 25
+
+          clips:
+            enabled: True
+            pre_capture: 5
+            post_capture: 5
+            required_zones: []
+            retain:
+              default: 10
+
+          record:
+            enabled: False
+
+          rtmp:
+            enabled: False
+
+          snapshots:
+            enabled: True
+            timestamp: False
+            bounding_box: True
+            crop: False
+            retain:
+              default: 10
+
+          mqtt:
+            enabled: True
+            timestamp: False
+            bounding_box: True
+            crop: False
+
+        backyard_terrace:
+          ffmpeg:
+            inputs:
+              - path: rtsp://192.168.0.1:7447/UCfkcmaIYCQanbjj
+                roles:
+                  - detect
+                  - clips
+          width: 1920
+          height: 1080
+          fps: 5
+
+          best_image_timeout: 10
+
+          detect:
+            enabled: True
+            max_disappeared: 25
+
+          clips:
+            enabled: True
+            pre_capture: 5
+            post_capture: 5
+            required_zones: []
+            retain:
+              default: 10
+
+          record:
+            enabled: False
+
+          rtmp:
+            enabled: False
+
+          snapshots:
+            enabled: True
+            timestamp: False
+            bounding_box: True
+            crop: False
+            retain:
+              default: 10
+
+          mqtt:
+            enabled: True
+            timestamp: False
+            bounding_box: True
+            crop: False
+
+        east_side:
+          ffmpeg:
+            inputs:
+              - path: rtsp://192.168.0.1:7447/bD35LvIY0mVXDGAV
+                roles:
+                  - detect
+                  - clips
+          width: 1920
+          height: 1080
+          fps: 5
+
+          best_image_timeout: 10
+
+          detect:
+            enabled: True
+            max_disappeared: 25
+
+          clips:
+            enabled: True
+            pre_capture: 5
+            post_capture: 5
+            required_zones: []
+            retain:
+              default: 10
+
+          record:
+            enabled: False
+
+          rtmp:
+            enabled: False
+
+          snapshots:
+            enabled: True
+            timestamp: False
+            bounding_box: True
+            crop: False
+            retain:
+              default: 10
+
+          mqtt:
+            enabled: True
+            timestamp: False
+            bounding_box: True
+            crop: False
+
+        utility_entrance:
+          ffmpeg:
+            inputs:
+              - path: rtsp://192.168.0.1:7447/4HGg2c1YLJSwtsNW
+                roles:
+                  - detect
+                  - clips
+          width: 1920
+          height: 1080
+          fps: 5
+
+          best_image_timeout: 10
+
+          detect:
+            enabled: True
+            max_disappeared: 25
+
+          clips:
+            enabled: True
+            pre_capture: 5
+            post_capture: 5
+            required_zones: []
+            retain:
+              default: 10
+
+          record:
+            enabled: False
+
+          rtmp:
+            enabled: False
+
+          snapshots:
+            enabled: True
+            timestamp: False
+            bounding_box: True
+            crop: False
+            retain:
+              default: 10
+
+          mqtt:
+            enabled: True
+            timestamp: False
+            bounding_box: True
+            crop: False
+
+        frontyard_garage:
+          ffmpeg:
+            inputs:
+              - path: rtsp://192.168.0.1:7447/cVT8xcvPAE1o0Rt4
+                roles:
+                  - detect
+                  - clips
+          width: 1920
+          height: 1080
+          fps: 5
+
+          best_image_timeout: 10
+
+          detect:
+            enabled: True
+            max_disappeared: 25
+
+          clips:
+            enabled: True
+            pre_capture: 5
+            post_capture: 5
+            required_zones: []
+            retain:
+              default: 10
+
+          record:
+            enabled: False
+
+          rtmp:
+            enabled: False
+
+          snapshots:
+            enabled: True
+            timestamp: False
+            bounding_box: True
+            crop: False
+            retain:
+              default: 10
+
+          mqtt:
+            enabled: True
+            timestamp: False
+            bounding_box: True
+            crop: False
