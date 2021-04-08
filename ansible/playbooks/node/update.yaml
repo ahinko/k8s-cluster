@@ -1,11 +1,20 @@
 ---
 
-- hosts:
-    - control-nodes
-    - worker-nodes
-  become: true
+- hosts: "{{ update_host | default('update_host') }}"
   gather_facts: true
   any_errors_fatal: true
+
+  vars_prompt:
+    - name: "run_confirmation"
+      prompt: "Are you sure you want to update node ? [Y/n]"
+      default: "n"
+      private: false
+
+  pre_tasks:
+    - name: check confirmation
+      fail:
+        msg: "Abort."
+      when: run_confirmation != "Y"
 
   tasks:
     - name: upgrade

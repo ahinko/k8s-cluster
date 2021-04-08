@@ -30,5 +30,6 @@ tasks:
   update:
     desc: Update nodes operating system
     cmds:
-      - ansible-playbook {{.ANSIBLE_PLAYBOOK_DIR}}/node/update.yaml
+      - echo "Updating {{ .NODE }}"
+      - ansible-playbook {{.ANSIBLE_PLAYBOOK_DIR}}/node/update.yaml --extra-vars "update_host={{ .NODE }}"
     silent: true

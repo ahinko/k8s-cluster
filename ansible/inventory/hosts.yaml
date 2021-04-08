@@ -19,3 +19,4 @@ all:
     # Empty group. You have to specify the host you want to reboot when calling the
     # reboot playbook.
     reboot_host:
+    update_host:
