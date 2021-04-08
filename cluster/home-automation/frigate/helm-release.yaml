@@ -107,7 +107,8 @@ spec:
         gpu.intel.com/i915: 1
 
     config: |
-      mqtt: mosquitto
+      mqtt:
+        host: mosquitto
 
       logger:
         # Optional: default log level (default: shown below)
