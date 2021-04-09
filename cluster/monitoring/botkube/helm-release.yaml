@@ -49,7 +49,6 @@ spec:
               - kube-system
               - metallb-system
               - monitoring
-              - rook-ceph
               - vault
               - cert-manager
               - home-automation
@@ -64,7 +63,7 @@ spec:
           namespaces:
             include:
               - jobs
-              - development
+              - rook-ceph
           events:
             - error
         - name: v1/services
