@@ -33,7 +33,7 @@ spec:
 
     image:
       repository: blakeblackshear/frigate
-      tag: 0.8.0-amd64
+      tag: 0.8.4-amd64
       pullPolicy: IfNotPresent
 
     podAnnotations:
