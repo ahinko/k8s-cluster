@@ -45,16 +45,18 @@ spec:
           namespaces:
             include:
               - default
+              - actions-runner-system
               - flux-system
+              - home-automation
+              - jobs
               - kube-system
+              - media
               - metallb-system
               - monitoring
-              - vault
-              - cert-manager
-              - home-automation
-              - apps
+              - network
               - system-upgrade
-              - media
+              - tigera-operator
+              - vault
           events:
             - create
             - error
@@ -135,10 +137,28 @@ spec:
         - name: v1/configmaps
           namespaces:
             include:
-              - all
+              - default
+              - actions-runner-system
+              - flux-system
+              - home-automation
+              - jobs
+              - kube-system
+              - media
+              - metallb-system
+              - monitoring
+              - network
+              - system-upgrade
+              - tigera-operator
+              - vault
           events:
             - create
+            - error
             - delete
+        - name: v1/configmaps
+          namespaces:
+            include:
+              - rook-ceph
+          events:
             - error
         - name: apps/v1/daemonsets
           namespaces:
