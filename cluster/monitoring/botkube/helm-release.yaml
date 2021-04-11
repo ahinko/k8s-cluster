@@ -48,7 +48,6 @@ spec:
               - actions-runner-system
               - flux-system
               - home-automation
-              - jobs
               - kube-system
               - media
               - metallb-system
