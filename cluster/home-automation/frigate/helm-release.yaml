@@ -132,6 +132,7 @@ spec:
         output_args:
           # Optional: output args for detect streams (default: shown below)
           detect: -f rawvideo -pix_fmt yuv420p -vf fps=fps=5
+          clips: -f segment -segment_time 10 -segment_format mp4 -reset_timestamps 1 -strftime 1 -c copy
 
       objects:
         track:
@@ -156,7 +157,7 @@ spec:
             # Optional: maximum width*height of the bounding box for the detected object (default: 24000000)
             max_area: 100000
             # Optional: minimum score for the object to initiate tracking (default: shown below)
-            min_score: 0.5
+            min_score: 0.4
             # Optional: minimum decimal percentage for tracked object's computed score to be considered a true positive (default: shown below)
             threshold: 0.7
 
@@ -195,7 +196,7 @@ spec:
             # This value can be set via MQTT and will be updated in startup based on retained value
             enabled: True
             # Optional: Number of frames without a detection before frigate considers an object to be gone. (default: 5x the frame rate)
-            max_disappeared: 25
+            max_disappeared: 50
 
           # Optional: save clips configuration
           clips:
@@ -267,7 +268,7 @@ spec:
 
           detect:
             enabled: True
-            max_disappeared: 25
+            max_disappeared: 50
 
           clips:
             enabled: True
@@ -312,7 +313,7 @@ spec:
 
           detect:
             enabled: True
-            max_disappeared: 25
+            max_disappeared: 50
 
           clips:
             enabled: True
@@ -357,7 +358,7 @@ spec:
 
           detect:
             enabled: True
-            max_disappeared: 25
+            max_disappeared: 50
 
           clips:
             enabled: True
@@ -402,7 +403,7 @@ spec:
 
           detect:
             enabled: True
-            max_disappeared: 25
+            max_disappeared: 50
 
           clips:
             enabled: True
@@ -447,7 +448,7 @@ spec:
 
           detect:
             enabled: True
-            max_disappeared: 25
+            max_disappeared: 50
 
           clips:
             enabled: True
