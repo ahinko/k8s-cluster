@@ -172,9 +172,13 @@
             ]
         },
         {
-            "matchDatasources": ["docker"],
-            "versioning": "loose",
-            "matchPackageNames": ["pihole/pihole"]
+            "matchDatasources": [
+                "docker"
+            ],
+            "versioning": "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.?(?<patch>\\d+)?$",
+            "matchPackageNames": [
+                "pihole/pihole"
+            ]
         }
     ]
 }
