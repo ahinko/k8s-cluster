@@ -45,7 +45,6 @@ spec:
           namespaces:
             include:
               - default
-              - actions-runner-system
               - flux-system
               - home-automation
               - kube-system
@@ -65,6 +64,7 @@ spec:
             include:
               - jobs
               - rook-ceph
+              - actions-runner-system
           events:
             - error
         - name: v1/services
