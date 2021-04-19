@@ -28,7 +28,7 @@ spec:
     controllerType: deployment
     image:
       repository: homeassistant/home-assistant
-      tag: 2021.4.5
+      tag: 2021.4.6
     env:
       TZ: "Europe/Stockholm"
     hostNetwork: true
