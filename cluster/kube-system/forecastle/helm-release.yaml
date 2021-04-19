@@ -11,7 +11,7 @@ spec:
     spec:
       # renovate: registryUrl=https://stakater.github.io/stakater-charts
       chart: forecastle
-      version: 1.0.65
+      version: v1.0.63
       sourceRef:
         kind: HelmRepository
         name: stakater-charts
@@ -19,6 +19,10 @@ spec:
       interval: 5m
   values:
     forecastle:
+      image:
+        name: stakater/forecastle
+        tag: v1.0.63
+
       config:
         title: "Apps"
         namespaceSelector:
