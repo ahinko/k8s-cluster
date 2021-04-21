@@ -21,7 +21,7 @@ spec:
     controllerType: deployment
     image:
       repository: ghcr.io/k8s-at-home/bazarr
-      tag: v0.9.1.1
+      tag: v0.9.4
     env:
       TZ: "Europe/Stockholm"
     ingress:
@@ -29,7 +29,7 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "internal"
         forecastle.stakater.com/expose: "true"
-        forecastle.stakater.com/icon: "https://github.com/morpheus65535/bazarr/blob/master/static/logo128.png?raw=true"
+        forecastle.stakater.com/icon: "https://github.com/morpheus65535/bazarr/blob/master/frontend/src/%40static/logo128.png?raw=true"
         forecastle.stakater.com/network-restricted: "true"
       hosts:
         - host: bazarr.komhem.xyz
