@@ -28,10 +28,6 @@
     - name: reboot {{ inventory_hostname }}
       reboot:
 
-    - name: pause for 30 seconds before uncordon
-      pause:
-        seconds: 30
-
     - name: uncordon {{ inventory_hostname }}
       become: false
       ansible.builtin.command: kubectl uncordon {{ inventory_hostname }}
