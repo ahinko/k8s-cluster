@@ -25,7 +25,7 @@ spec:
 
     image:
       repository: "pihole/pihole"
-      tag: v5.8
+      tag: v5.8.1
 
     podAnnotations:
       secret.reloader.stakater.com/reload: "pihole-password"
