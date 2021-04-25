@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: infracloudio/botkube
-      tag: v0.12.0
+      tag: v0.12.1
       pullPolicy: IfNotPresent
     podAnnotations:
       secret.reloader.stakater.com/reload: "botkube-config"
