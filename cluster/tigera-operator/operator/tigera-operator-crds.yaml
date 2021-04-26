@@ -4901,3 +4901,15 @@ spec:
         - name: var-lib-calico
           hostPath:
             path: /var/lib/calico
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - helios
+                      - zeus
+                      - iris
