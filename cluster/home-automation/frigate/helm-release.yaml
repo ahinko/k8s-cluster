@@ -137,19 +137,9 @@ spec:
       objects:
         track:
           - person
-          - bicycle
-          - bus
-          - car
           - bird
           - cat
           - dog
-          - horse
-          - sheep
-          - cow
-          - elephant
-          - bear
-          - zebra
-          - giraffe
         filters:
           person:
             # Optional: minimum width*height of the bounding box for the detected object (default: 0)
