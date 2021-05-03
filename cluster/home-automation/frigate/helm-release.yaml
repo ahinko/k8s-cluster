@@ -467,3 +467,17 @@ spec:
             timestamp: False
             bounding_box: True
             crop: False
+
+          objects:
+            track:
+              - person
+              - bird
+              - cat
+              - dog
+            filters:
+              person:
+                # Optional: minimum width*height of the bounding box for the detected object (default: 0)
+                min_area: 5000
+                max_area: 100000
+                min_score: 0.3
+                threshold: 0.6
