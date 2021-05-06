@@ -62,8 +62,6 @@ spec:
               mountPath: /zigbee
             - name: zwave2mqtt-persistent-storage
               mountPath: /zwave
-            - name: nodered-persistent-storage
-              mountPath: /nodered
       volumes:
         - name: hass-persistent-storage
           persistentVolumeClaim:
@@ -74,6 +72,3 @@ spec:
         - name: zwave2mqtt-persistent-storage
           persistentVolumeClaim:
             claimName: zwave2mqtt-config
-        - name: nodered-persistent-storage
-          persistentVolumeClaim:
-            claimName: node-red-data
