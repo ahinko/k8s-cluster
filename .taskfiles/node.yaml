@@ -33,3 +33,10 @@ tasks:
       - echo "Updating {{ .NODE }}"
       - ansible-playbook {{.ANSIBLE_PLAYBOOK_DIR}}/node/update.yaml --extra-vars "update_host={{ .NODE }}"
     silent: true
+
+  wake-on-lan:
+    desc: Wake Kronos
+    cmds:
+      - echo "Sending wake on lan package to Kronos"
+      - ansible-playbook {{.ANSIBLE_PLAYBOOK_DIR}}/node/wake-kronos.yaml
+    silent: true

@@ -3,3 +3,5 @@
 roles:
   - src: xanmanning.k3s
     version: v2.8.5
+  - src: community.general.wakeonlan
+    version: 3.0.1

@@ -1,0 +1,14 @@
+---
+
+- hosts:
+    - backup-nodes
+  gather_facts: false
+  any_errors_fatal: true
+
+  tasks:
+    - name: Send a magic Wake-on-LAN packet to Kronos
+      community.general.wakeonlan:
+        mac: 'd0:50:99:c0:15:b0'
+        broadcast: 192.20.2.4
+      delegate_to: localhost
+      become: false
