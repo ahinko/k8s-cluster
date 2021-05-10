@@ -68,7 +68,6 @@
                 "minor",
                 "patch"
             ],
-            "separateMinorPatch": true
         },
         // add labels according to package and update types
         {
