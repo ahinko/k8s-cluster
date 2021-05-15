@@ -459,6 +459,13 @@ spec:
                 description: 'BPFEnabled, if enabled Felix will use the BPF dataplane.
                   [Default: false]'
                 type: boolean
+              bpfExtToServiceConnmark:
+                description: 'BPFExtToServiceConnmark in BPF mode, control a 32bit
+                  mark that is set on connections from an external client to a local
+                  service. This mark allows us to control how packets of that connection
+                  are routed within the host and how is routing intepreted by RPF
+                  check. [Default: 0]'
+                type: integer
               bpfExternalServiceMode:
                 description: 'BPFExternalServiceMode in BPF mode, controls how connections
                   from outside the cluster to services (node ports and cluster IPs)
@@ -547,19 +554,21 @@ spec:
                   type: string
                 type: array
               failsafeInboundHostPorts:
-                description: 'FailsafeInboundHostPorts is a comma-delimited list of
-                  UDP/TCP ports that Felix will allow incoming traffic to host endpoints
+                description: 'FailsafeInboundHostPorts is a list of UDP/TCP ports
+                  and CIDRs that Felix will allow incoming traffic to host endpoints
                   on irrespective of the security policy. This is useful to avoid
-                  accidentally cutting off a host with incorrect configuration. Each
-                  port should be specified as tcp:<port-number> or udp:<port-number>.
-                  For back-compatibility, if the protocol is not specified, it defaults
-                  to "tcp". To disable all inbound host ports, use the value none.
-                  The default value allows ssh access and DHCP. [Default: tcp:22,
+                  accidentally cutting off a host with incorrect configuration. For
+                  back-compatibility, if the protocol is not specified, it defaults
+                  to "tcp". If a CIDR is not specified, it will allow traffic from
+                  all addresses. To disable all inbound host ports, use the value
+                  none. The default value allows ssh access and DHCP. [Default: tcp:22,
                   udp:68, tcp:179, tcp:2379, tcp:2380, tcp:6443, tcp:6666, tcp:6667]'
                 items:
-                  description: ProtoPort is combination of protocol and port, both
-                    must be specified.
+                  description: ProtoPort is combination of protocol, port, and CIDR.
+                    Protocol and port must be specified.
                   properties:
+                    net:
+                      type: string
                     port:
                       type: integer
                     protocol:
@@ -570,21 +579,23 @@ spec:
                   type: object
                 type: array
               failsafeOutboundHostPorts:
-                description: 'FailsafeOutboundHostPorts is a comma-delimited list
-                  of UDP/TCP ports that Felix will allow outgoing traffic from host
-                  endpoints to irrespective of the security policy. This is useful
-                  to avoid accidentally cutting off a host with incorrect configuration.
-                  Each port should be specified as tcp:<port-number> or udp:<port-number>.
-                  For back-compatibility, if the protocol is not specified, it defaults
-                  to "tcp". To disable all outbound host ports, use the value none.
-                  The default value opens etcd''s standard ports to ensure that Felix
-                  does not get cut off from etcd as well as allowing DHCP and DNS.
-                  [Default: tcp:179, tcp:2379, tcp:2380, tcp:6443, tcp:6666, tcp:6667,
-                  udp:53, udp:67]'
+                description: 'FailsafeOutboundHostPorts is a list of UDP/TCP ports
+                  and CIDRs that Felix will allow outgoing traffic from host endpoints
+                  to irrespective of the security policy. This is useful to avoid
+                  accidentally cutting off a host with incorrect configuration. For
+                  back-compatibility, if the protocol is not specified, it defaults
+                  to "tcp". If a CIDR is not specified, it will allow traffic from
+                  all addresses. To disable all outbound host ports, use the value
+                  none. The default value opens etcd''s standard ports to ensure that
+                  Felix does not get cut off from etcd as well as allowing DHCP and
+                  DNS. [Default: tcp:179, tcp:2379, tcp:2380, tcp:6443, tcp:6666,
+                  tcp:6667, udp:53, udp:67]'
                 items:
-                  description: ProtoPort is combination of protocol and port, both
-                    must be specified.
+                  description: ProtoPort is combination of protocol, port, and CIDR.
+                    Protocol and port must be specified.
                   properties:
+                    net:
+                      type: string
                     port:
                       type: integer
                     protocol:
@@ -3251,8 +3262,7 @@ spec:
                     digest:
                       description: Digest is the image identifier that will be used
                         for the Image. The field should not include a leading `@`
-                        and must be prefixed with `sha256:`, if other digest prefixes
-                        are needed please submit a feature request.
+                        and must be prefixed with `sha256:`.
                       type: string
                     image:
                       description: Image is an image that the operator deploys and
@@ -3388,6 +3398,16 @@ spec:
                       - cidr
                       type: object
                     type: array
+                  linuxDataplane:
+                    description: 'LinuxDataplane is used to select the dataplane used
+                      for Linux nodes. In particular, it causes the operator to add
+                      required mounts and environment variables for the particular
+                      dataplane. If not specified, iptables mode is used. Default:
+                      Iptables'
+                    enum:
+                    - Iptables
+                    - BPF
+                    type: string
                   mtu:
                     description: MTU specifies the maximum transmission unit to use
                       on the pod network. If not specified, Calico will perform MTU
@@ -3503,7 +3523,7 @@ spec:
                   signerName:
                     description: 'When a CSR is issued to the certificates.k8s.io
                       API, the signerName is added to the request in order to accommodate
-                      for clusters with multiple signers. Must be formatted as: "<my-domain>/<my-signername>".'
+                      for clusters with multiple signers. Must be formatted as: `<my-domain>/<my-signername>`.'
                     type: string
                 required:
                 - caCert
@@ -3561,7 +3581,8 @@ spec:
                 type: object
               componentResources:
                 description: ComponentResources can be used to customize the resource
-                  requirements for each component.
+                  requirements for each component. Node, Typha, and KubeControllers
+                  are supported for installations.
                 items:
                   description: The ComponentResource struct associates a ResourceRequirements
                     with a component by name
@@ -3952,6 +3973,16 @@ spec:
                           - cidr
                           type: object
                         type: array
+                      linuxDataplane:
+                        description: 'LinuxDataplane is used to select the dataplane
+                          used for Linux nodes. In particular, it causes the operator
+                          to add required mounts and environment variables for the
+                          particular dataplane. If not specified, iptables mode is
+                          used. Default: Iptables'
+                        enum:
+                        - Iptables
+                        - BPF
+                        type: string
                       mtu:
                         description: MTU specifies the maximum transmission unit to
                           use on the pod network. If not specified, Calico will perform
@@ -4071,7 +4102,7 @@ spec:
                         description: 'When a CSR is issued to the certificates.k8s.io
                           API, the signerName is added to the request in order to
                           accommodate for clusters with multiple signers. Must be
-                          formatted as: "<my-domain>/<my-signername>".'
+                          formatted as: `<my-domain>/<my-signername>`.'
                         type: string
                     required:
                     - caCert
@@ -4129,7 +4160,8 @@ spec:
                     type: object
                   componentResources:
                     description: ComponentResources can be used to customize the resource
-                      requirements for each component.
+                      requirements for each component. Node, Typha, and KubeControllers
+                      are supported for installations.
                     items:
                       description: The ComponentResource struct associates a ResourceRequirements
                         with a component by name
@@ -4749,6 +4781,7 @@ rules:
     - crd.projectcalico.org
     resources:
     - ippools
+    - kubecontrollersconfigurations
     verbs:
     - get
     - list
@@ -4874,7 +4907,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: tigera-operator
-          image: quay.io/tigera/operator:v1.15.1
+          image: quay.io/tigera/operator:v1.17.1
           imagePullPolicy: IfNotPresent
           command:
             - operator
@@ -4892,7 +4925,7 @@ spec:
             - name: OPERATOR_NAME
               value: "tigera-operator"
             - name: TIGERA_OPERATOR_INIT_IMAGE_VERSION
-              value: v1.15.1
+              value: v1.17.1
           envFrom:
             - configMapRef:
                 name: kubernetes-services-endpoint
