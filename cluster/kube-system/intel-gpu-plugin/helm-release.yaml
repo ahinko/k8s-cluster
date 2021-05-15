@@ -11,7 +11,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: intel-gpu-plugin
-      version: 1.2.3
+      version: 2.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -19,11 +19,17 @@ spec:
       interval: 5m
   values:
     image:
-      tag: 0.19.0
-    securityContext:
-      readOnlyRootFilesystem: true
-    nodeSelector:
-      feature.node.kubernetes.io/custom-intel-gpu: "true"
+      repository: intel/intel-gpu-plugin
+      tag: 0.20.0
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/pci-0300_8086.present
+                  operator: In
+                  values:
+                    - "true"
     resources:
       requests:
         memory: "64Mi"
