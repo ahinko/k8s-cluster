@@ -60,7 +60,7 @@ spec:
               mountPath: /hass
             - name: zigbee2mqtt-persistent-storage
               mountPath: /zigbee
-            - name: zwave2mqtt-persistent-storage
+            - name: zwavejs-persistent-storage
               mountPath: /zwave
       volumes:
         - name: hass-persistent-storage
@@ -69,6 +69,6 @@ spec:
         - name: zigbee2mqtt-persistent-storage
           persistentVolumeClaim:
             claimName: zigbee2mqtt-data
-        - name: zwave2mqtt-persistent-storage
+        - name: zwavejs-persistent-storage
           persistentVolumeClaim:
-            claimName: zwave2mqtt-config
+            claimName: zwavejs-config
