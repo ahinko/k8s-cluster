@@ -26,7 +26,7 @@ spec:
       type: Recreate
 
     env:
-      TZ="Europe/Stockholm"
+      TZ: "Europe/Stockholm"
 
     service:
       port:
