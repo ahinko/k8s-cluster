@@ -11,7 +11,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: zwavejs2mqtt
-      version: 8.1.1
+      version: 3.5.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -19,11 +19,14 @@ spec:
       interval: 5m
   values:
     image:
-      repository: zwavejs/zwavejs2mqtt
-      tag: 3.0.3
+      repository: ghcr.io/zwave-js/zwavejs2mqtt
+      tag: 4.2.1
 
     strategy:
       type: Recreate
+
+    env:
+      TZ="Europe/Stockholm"
 
     service:
       port:
