@@ -3,15 +3,15 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: zwave2mqtt
+  name: zwavejs
   namespace: home-automation
 spec:
   interval: 5m
   chart:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
-      chart: zwave2mqtt
-      version: 8.4.0
+      chart: zwavejs2mqtt
+      version: 8.1.1
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -19,32 +19,36 @@ spec:
       interval: 5m
   values:
     image:
-      repository: robertslando/zwave2mqtt
-      tag: 4.1.1
+      repository: zwavejs/zwavejs2mqtt
+      tag: 3.0.3
 
-    replicaCount: 1
     strategy:
       type: Recreate
 
-    env:
-      TZ: "Europe/Stockholm"
+    service:
+      port:
+        port: 8091
+      additionalPorts:
+        - name: websocket
+          port: 3000
 
     ingress:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: "internal"
         forecastle.stakater.com/expose: "true"
-        forecastle.stakater.com/icon: "https://brands.home-assistant.io/_/zwave/icon.png"
+        forecastle.stakater.com/icon: "https://raw.githubusercontent.com/zwave-js/zwavejs2mqtt/master/docs/_images/zwavejs_logo.svg"
         forecastle.stakater.com/network-restricted: "true"
       hosts:
-        - host: zwave.komhem.xyz
+        - host: zwavejs.komhem.xyz
           paths:
             - path: /
               pathType: Prefix
       tls:
         - hosts:
-            - "zwave.komhem.xyz"
+            - "zwavejs.komhem.xyz"
 
+    # Privileged may be required if USB controller is accessed directly through the host machine
     securityContext:
       privileged: true
 
@@ -53,7 +57,7 @@ spec:
         enabled: true
         mountPath: /usr/src/app/store
         skipuninstall: true
-        existingClaim: "zwave2mqtt-config"
+        existingClaim: "zwavejs-config"
 
     # Path to your zwave device in the container
     additionalVolumeMounts:
@@ -71,7 +75,10 @@ spec:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
             - matchExpressions:
-                - {key: "feature.node.kubernetes.io/usb-02_0658_0200.present", operator: In, values: ["true"]}
+                - key: feature.node.kubernetes.io/custom-zwave
+                  operator: In
+                  values:
+                    - "true"
 
     resources:
       requests:

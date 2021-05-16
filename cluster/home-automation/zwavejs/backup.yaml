@@ -1,0 +1,46 @@
+---
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: backup-zwavejs
+  namespace: home-automation
+spec:
+  schedule: "30 10,22 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: backup-zwavejs
+              image: registry.komhem.xyz/docker/k8s-volume-backup:stable
+              args:
+                - /bin/sh
+                - /backup.sh
+              env:
+                - name: MINIO_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_ACCESS_KEY
+                - name: MINIO_SECRET_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: minio-credentials
+                      key: MINIO_SECRET_KEY
+                - name: MINIO_ENDPOINT
+                  value: "192.168.20.2:9000"
+                - name: MINIO_BUCKET
+                  value: "backup/zwave2mqtt"
+                - name: LOCAL_PATH
+                  value: "/zwave"
+                - name: FILE_NAME
+                  value: "zwavejs"
+              volumeMounts:
+                - name: zwavejs-persistent-storage
+                  mountPath: /zwave
+          restartPolicy: OnFailure
+          volumes:
+            - name: zwavejs-persistent-storage
+              persistentVolumeClaim:
+                claimName: zwavejs-config
