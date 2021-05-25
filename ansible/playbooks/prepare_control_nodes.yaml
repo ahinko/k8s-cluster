@@ -17,7 +17,7 @@
   roles:
     - {role: keepalived}
     - {role: haproxy}
-    - {role: dnscrypt-proxy}
+    - {role: dnscrypt_proxy}
   tasks:
     - name: Ensure nfs-common is installed
       apt:
