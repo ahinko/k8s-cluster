@@ -184,7 +184,7 @@ spec:
 
           # maxUnavailable will default to (n/2)-1 where n is the number of
           # replicas. If you'd like a custom value, you can specify an override here.
-          maxUnavailable: 1
+          # maxUnavailable: 1
 
       # Definition of the serviceAccount used to run Vault.
       # These options are also used when using an external Vault server to validate
