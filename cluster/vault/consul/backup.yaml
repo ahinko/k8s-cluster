@@ -7,6 +7,8 @@ metadata:
   namespace: vault
 spec:
   schedule: "40 19 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:

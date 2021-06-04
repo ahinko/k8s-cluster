@@ -7,6 +7,8 @@ metadata:
   namespace: network
 spec:
   schedule: "0 22 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:

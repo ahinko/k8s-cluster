@@ -7,6 +7,8 @@ metadata:
   namespace: home-automation
 spec:
   schedule: "0 10,22 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
