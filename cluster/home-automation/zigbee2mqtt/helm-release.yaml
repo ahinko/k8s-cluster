@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: ghcr.io/koenkk/zigbee2mqtt
-      tag: 1.19.0
+      tag: 1.19.1
 
     podAnnotations:
       secret.reloader.stakater.com/reload: "zigbee-mqtt-secrets"
