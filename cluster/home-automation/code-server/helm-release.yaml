@@ -58,7 +58,7 @@ spec:
         mountPath: /config
 
     additionalVolumeMounts:
-      - name: home-assistant-config-mount
+      - name: home-assistant-pvc
         mountPath: "/hass"
     additionalVolumes:
       - name: home-assistant-pvc
