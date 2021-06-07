@@ -31,9 +31,8 @@ spec:
       tag: "v3.10.1-ls81"
 
     env:
-      TZ: "Europe/Stockholm"
-
-    secret:
+      - name: TZ
+        value: "Europe/Stockholm"
       - name: PASSWORD
         valueFrom:
           secretKeyRef:
