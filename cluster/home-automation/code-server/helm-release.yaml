@@ -32,11 +32,6 @@ spec:
 
     env:
       TZ: "Europe/Stockholm"
-      PASSWORD:
-        valueFrom:
-          secretKeyRef:
-            name: code-server-credentials
-            key: password
 
     ingress:
       enabled: true
