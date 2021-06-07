@@ -187,6 +187,6 @@
             "matchPackageNames": [
                 "ghcr.io/linuxserver/code-server"
             ],
-        },
+        }
     ]
 }
