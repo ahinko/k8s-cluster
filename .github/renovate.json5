@@ -185,7 +185,7 @@
             ],
             "versioning": "regex:^version-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
             "matchPackageNames": [
-                "linuxserver/code-server"
+                "ghcr.io/linuxserver/code-server"
             ],
         },
     ]
