@@ -47,7 +47,7 @@ spec:
     controller:
       image:
         repository: quay.io/metallb/controller
-        tag: v0.9.6
+        tag: v0.10.0
         pullPolicy: IfNotPresent
 
       prometheus:
@@ -75,7 +75,7 @@ spec:
     speaker:
       image:
         repository: quay.io/metallb/speaker
-        tag: v0.9.6
+        tag: v0.10.0
         pullPolicy: IfNotPresent
 
       prometheus:
