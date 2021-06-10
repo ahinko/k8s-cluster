@@ -11,7 +11,7 @@ spec:
     spec:
       # renovate: registryUrl=https://k8s-at-home.com/charts/
       chart: home-assistant
-      version: 8.3.1
+      version: 9.0.0
       sourceRef:
         kind: HelmRepository
         name: k8s-at-home-charts
@@ -35,20 +35,21 @@ spec:
     dnsPolicy: ClusterFirstWithHostNet
 
     ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "external"
-        forecastle.stakater.com/expose: "true"
-        forecastle.stakater.com/icon: "https://github.com/home-assistant/assets/blob/master/logo/logo.svg?raw=true"
-        forecastle.stakater.com/network-restricted: "true"
-      hosts:
-        - host: hass.komhem.xyz
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - "hass.komhem.xyz"
+      main:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "external"
+          forecastle.stakater.com/expose: "true"
+          forecastle.stakater.com/icon: "https://github.com/home-assistant/assets/blob/master/logo/logo.svg?raw=true"
+          forecastle.stakater.com/network-restricted: "true"
+        hosts:
+          - host: hass.komhem.xyz
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "hass.komhem.xyz"
 
     prometheus:
       serviceMonitor:
