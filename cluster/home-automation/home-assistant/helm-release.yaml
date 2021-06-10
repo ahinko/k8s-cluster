@@ -95,6 +95,9 @@ spec:
               paths:
                 - path: /
                   pathType: Prefix
+                  service:
+                    name: home-assistant-codeserver
+                    port: 12321
           tls:
             - hosts:
                 - "code.komhem.xyz"
