@@ -54,14 +54,6 @@ spec:
       serviceMonitor:
         enabled: false
 
-    probes:
-      liveness:
-        enabled: false
-      readiness:
-        enabled: false
-      startup:
-        enabled: false
-
     persistence:
       config:
         enabled: true
@@ -74,3 +66,37 @@ spec:
         memory: 1000Mi
       limits:
         memory: 2500Mi
+
+    addons:
+      codeserver:
+        enabled: true
+        image:
+          repository: codercom/code-server
+          tag: 3.9.0
+        workingDir: "/config"
+        args:
+          - --auth
+          - "none"
+          - --user-data-dir
+          - "/config/.vscode"
+          - --extensions-dir
+          - "/config/.vscode"
+        ingress:
+          enabled: true
+          annotations:
+            kubernetes.io/ingress.class: "internal"
+            nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+            forecastle.stakater.com/expose: "true"
+            forecastle.stakater.com/icon: "https://user-images.githubusercontent.com/674621/71187801-14e60a80-2280-11ea-94c9-e56576f76baf.png"
+            forecastle.stakater.com/network-restricted: "true"
+          hosts:
+            - host: code.komhem.xyz
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - "code.komhem.xyz"
+        volumeMounts:
+          - name: config
+            mountPath: /config
