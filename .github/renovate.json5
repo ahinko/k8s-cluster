@@ -178,15 +178,6 @@
             "matchPackageNames": [
                 "pihole/pihole"
             ]
-        },
-        {
-            "matchDatasources": [
-                "docker"
-            ],
-            "versioning": "regex:^version-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
-            "matchPackageNames": [
-                "ghcr.io/linuxserver/code-server"
-            ],
         }
     ]
 }

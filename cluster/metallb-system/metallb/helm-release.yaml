@@ -11,7 +11,7 @@ spec:
     spec:
       # renovate: registryUrl=https://charts.bitnami.com/bitnami
       chart: metallb
-      version: 2.4.1
+      version: 2.4.2
       sourceRef:
         kind: HelmRepository
         name: bitnami-charts
@@ -48,7 +48,7 @@ spec:
       image:
         registry: docker.io
         repository: metallb/controller
-        tag: v0.10.0
+        tag: v0.10.1
         pullPolicy: IfNotPresent
 
       prometheus:
@@ -77,7 +77,7 @@ spec:
       image:
         registry: docker.io
         repository: metallb/speaker
-        tag: v0.10.0
+        tag: v0.10.1
         pullPolicy: IfNotPresent
 
       prometheus:
