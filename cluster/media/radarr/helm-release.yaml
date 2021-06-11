@@ -59,4 +59,4 @@ spec:
         cpu: 500m
       limits:
         memory: 1500Mi
-        cpu: 1
+        cpu: 750m
