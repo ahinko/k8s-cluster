@@ -18,42 +18,45 @@ spec:
         namespace: flux-system
       interval: 5m
   values:
-    controllerType: deployment
     image:
       repository: ghcr.io/k8s-at-home/radarr
       tag: v3.2.2.5080
+
     env:
       TZ: "Europe/Stockholm"
+
     ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "external"
-        forecastle.stakater.com/expose: "true"
-        forecastle.stakater.com/icon: "https://github.com/Radarr/Radarr/blob/develop/Logo/128.png?raw=true"
-        forecastle.stakater.com/network-restricted: "true"
-      hosts:
-        - host: radarr.komhem.xyz
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - "radarr.komhem.xyz"
+      main:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "external"
+          forecastle.stakater.com/expose: "true"
+          forecastle.stakater.com/icon: "https://github.com/Radarr/Radarr/blob/develop/Logo/128.png?raw=true"
+          forecastle.stakater.com/network-restricted: "true"
+        hosts:
+          - host: radarr.komhem.xyz
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "radarr.komhem.xyz"
+
     persistence:
       config:
         enabled: true
         skipuninstall: true
         existingClaim: "radarr-config"
-    additionalVolumeMounts:
-      - name: media-atlas
+      media:
+        enabled: true
+        skipuninstall: true
         mountPath: "/media"
-    additionalVolumes:
-      - name: media-atlas
-        persistentVolumeClaim:
-          claimName: nfs-atlas-media-pvc
+        existingClaim: nfs-atlas-media-pvc
+
     resources:
       requests:
         memory: 250Mi
         cpu: 500m
       limits:
         memory: 1500Mi
+        cpu: 1
