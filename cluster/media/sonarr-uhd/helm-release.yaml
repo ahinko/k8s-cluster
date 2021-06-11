@@ -41,7 +41,7 @@ spec:
                 pathType: Prefix
                 service:
                   name: sonarr-uhd
-                  port: 80
+                  port: 8989
         tls:
           - hosts:
               - "sonarr-uhd.komhem.xyz"
