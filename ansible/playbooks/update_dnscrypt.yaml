@@ -1,0 +1,22 @@
+---
+
+- hosts:
+    - control-nodes
+  gather_facts: true
+  any_errors_fatal: true
+
+  tasks:
+    - name: Ensure cloaking rules is set
+      become: true
+      template:
+        src: ../roles/dnscrypt_proxy/templates/cloaking-rules.txt.j2
+        dest: /etc/dnscrypt-proxy/cloaking-rules.txt
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Restart dnscrypt proxy
+      ansible.builtin.service:
+        name: dnscrypt-proxy
+        daemon-reload: yes
+        state: restarted
