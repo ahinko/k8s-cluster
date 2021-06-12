@@ -28,7 +28,7 @@ spec:
     controllerType: deployment
     image:
       repository: ghcr.io/home-assistant/home-assistant
-      tag: 2021.6.3
+      tag: 2021.6.4
     env:
       TZ: "Europe/Stockholm"
     hostNetwork: true
