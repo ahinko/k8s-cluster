@@ -6,7 +6,7 @@ metadata:
   name: cloudflare-ddns
   namespace: jobs
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "*/1 * * * *"
   successfulJobsHistoryLimit: 0
   failedJobsHistoryLimit: 1
   concurrencyPolicy: Forbid
@@ -40,7 +40,7 @@ spec:
                       name: cloudflare
                       key: wild_name
               command:
-                - "/bin/bash"
+                - "/bin/sh"
                 - |
                   IP=$(curl -s ifconfig.co)
 
