@@ -62,9 +62,9 @@ spec:
         - name: v1/pods
           namespaces:
             include:
-              - jobs
               - rook-ceph
               - actions-runner-system
+              - cert-manager
           events:
             - error
         - name: v1/services
