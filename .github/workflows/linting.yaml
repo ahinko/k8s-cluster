@@ -1,3 +1,5 @@
+---
+
 name: lint
 
 on:
@@ -7,38 +9,27 @@ on:
   pull_request:
 
 jobs:
-  lint-yaml:
-    runs-on:
-      - self-hosted
-    if: "!contains(github.event.head_commit.message, '[ci-skip]') || github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository"
+  yaml:
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
 
-      - name: Install yamllint
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y python3-pip
-          sudo pip3 install yamllint
+    - name: Lint YAML
+      uses: ibiqlik/action-yamllint@v3
+      with:
+        file_or_dir: "./cluster"
+        config_file: "./.github/yamllint.config.yaml"
 
-      - name: Lint YAML
-        uses: ibiqlik/action-yamllint@v3
-        with:
-          file_or_dir: "./cluster"
-          config_file: "./.github/yamllint.config.yaml"
-
-  lint-shell:
-    runs-on:
-      - self-hosted
-    if: "!contains(github.event.head_commit.message, '[ci-skip]') || github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository"
+  bash:
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-
-      - name: Lint shell scripts
-        uses: reviewdog/action-shellcheck@v1
-        with:
-          path: "./tools"
-          level: "error"
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+    - name: Lint Shell Scripts
+      uses: reviewdog/action-shellcheck@v1
+      with:
+        path: "./tools"
+        level: "error"
