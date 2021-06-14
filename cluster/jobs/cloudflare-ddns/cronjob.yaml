@@ -6,16 +6,18 @@ metadata:
   name: cloudflare-ddns
   namespace: jobs
 spec:
-  schedule: "*/20 * * * *"
+  schedule: "*/5 * * * *"
   successfulJobsHistoryLimit: 0
   failedJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
         spec:
+          restartPolicy: Never
           containers:
             - name: cloudflare-ddns
-              image: registry.komhem.xyz/docker/cloudflare-ddns:stable
+              image: curlimages/curl:7.75.0
               env:
                 - name: ZONE_ID
                   valueFrom:
@@ -31,20 +33,31 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       name: cloudflare
-                      key: record_id
-                - name: NAME
-                  valueFrom:
-                    secretKeyRef:
-                      name: cloudflare
-                      key: name
-                - name: WILD_RECORD_ID
-                  valueFrom:
-                    secretKeyRef:
-                      name: cloudflare
                       key: wild_record_id
-                - name: WILD_NAME
+                - name: DOMAIN_NAME
                   valueFrom:
                     secretKeyRef:
                       name: cloudflare
                       key: wild_name
-          restartPolicy: Never
+              command:
+                - "/bin/bash"
+                - |
+                  IP=$(curl -s ifconfig.co)
+
+                  if host $NAME 1.1.1.1 | grep "has address" | grep "$IP"; then
+                    echo "$NAME is currently set to $IP; no changes needed"
+                    exit 0
+                  else
+                    UPDATE=$(curl -X PUT "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$RECORD_ID" \
+                        -H "Authorization: Bearer $AUTH_KEY" \
+                        -H "Content-Type: application/json" \
+                        --data "{\"type\":\"A\",\"name\":\"$DOMAIN_NAME\",\"content\":\"$IP\"}")
+                  fi
+
+                  if echo "$UPDATE" | grep -q '\"success\":false'; then
+                    printf "%s - Yikes - Updating IP Address '%s' has failed" "$(date -u)" "$IP"
+                    exit 1
+                  else
+                    printf "%s - Success - IP Address '%s' has been updated" "$(date -u)" "$IP"
+                    exit 0
+                  fi
