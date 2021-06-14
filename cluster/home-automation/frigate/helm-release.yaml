@@ -137,7 +137,6 @@ spec:
       objects:
         track:
           - person
-          - bird
           - cat
           - dog
         filters:
