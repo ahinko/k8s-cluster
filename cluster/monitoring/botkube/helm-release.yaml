@@ -51,7 +51,6 @@ spec:
               - media
               - metallb-system
               - monitoring
-              - network
               - system-upgrade
               - tigera-operator
               - vault
@@ -65,6 +64,7 @@ spec:
               - rook-ceph
               - actions-runner-system
               - cert-manager
+              - network
           events:
             - error
         - name: v1/services
