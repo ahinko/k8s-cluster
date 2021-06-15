@@ -51,7 +51,6 @@ spec:
               - media
               - metallb-system
               - monitoring
-              - network
               - system-upgrade
               - tigera-operator
               - vault
@@ -62,9 +61,10 @@ spec:
         - name: v1/pods
           namespaces:
             include:
-              - jobs
               - rook-ceph
               - actions-runner-system
+              - cert-manager
+              - network
           events:
             - error
         - name: v1/services

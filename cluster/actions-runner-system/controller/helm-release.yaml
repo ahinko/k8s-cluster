@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: summerwind/actions-runner-controller
-      tag: v0.18.2
+      tag: v0.19.0
 
     env:
       TZ: "Europe/Stockholm"

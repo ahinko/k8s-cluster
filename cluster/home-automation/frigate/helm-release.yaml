@@ -9,6 +9,7 @@ spec:
   interval: 5m
   chart:
     spec:
+      # renovate: registryUrl=https://blakeblackshear.github.io/blakeshome-charts/
       chart: frigate
       version: 5.0.1
       sourceRef:
@@ -137,7 +138,6 @@ spec:
       objects:
         track:
           - person
-          - bird
           - cat
           - dog
         filters:
@@ -480,4 +480,4 @@ spec:
                 min_area: 5000
                 max_area: 100000
                 min_score: 0.3
-                threshold: 0.6
+                threshold: 0.7
