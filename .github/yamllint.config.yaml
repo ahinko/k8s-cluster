@@ -5,6 +5,7 @@ ignore: |
   ansible/
   *-crds.yaml
   crds.yaml
+  sops.secrets.yaml
 
 extends: default
 
