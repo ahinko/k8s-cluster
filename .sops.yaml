@@ -1,0 +1,7 @@
+---
+
+creation_rules:
+  - encrypted_regex: '^(data|stringData)$'
+    # macbook
+    pgp: >-
+      4F8ADC548A0D7924D2F97C4BA49FDC84B6AD510B
