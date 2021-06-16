@@ -32,9 +32,6 @@ spec:
       namespace: 'cert-manager'
       name: '*'
     - kind: HelmRelease
-      namespace: 'development'
-      name: '*'
-    - kind: HelmRelease
       namespace: 'home-automation'
       name: '*'
     - kind: HelmRelease
@@ -48,5 +45,14 @@ spec:
       name: '*'
     - kind: HelmRelease
       namespace: 'vault'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'media'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'rook-ceph'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'calico-system'
       name: '*'
   suspend: false
