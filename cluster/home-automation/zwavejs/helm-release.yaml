@@ -29,27 +29,29 @@ spec:
       TZ: "Europe/Stockholm"
 
     service:
-      port:
-        port: 8091
-      additionalPorts:
-        - name: websocket
+      main:
+        port:
+          port: 8091
+      websocket:
+        port:
           port: 3000
 
     ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "internal"
-        forecastle.stakater.com/expose: "true"
-        forecastle.stakater.com/icon: "https://raw.githubusercontent.com/zwave-js/zwavejs2mqtt/master/docs/_images/zwavejs_logo.svg"
-        forecastle.stakater.com/network-restricted: "true"
-      hosts:
-        - host: zwavejs.komhem.xyz
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - "zwavejs.komhem.xyz"
+      main:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "internal"
+          forecastle.stakater.com/expose: "true"
+          forecastle.stakater.com/icon: "https://raw.githubusercontent.com/zwave-js/zwavejs2mqtt/master/docs/_images/zwavejs_logo.svg"
+          forecastle.stakater.com/network-restricted: "true"
+        hosts:
+          - host: zwavejs.komhem.xyz
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "zwavejs.komhem.xyz"
 
     # Privileged may be required if USB controller is accessed directly through the host machine
     securityContext:
@@ -61,17 +63,10 @@ spec:
         mountPath: /usr/src/app/store
         skipuninstall: true
         existingClaim: "zwavejs-config"
-
-    # Path to your zwave device in the container
-    additionalVolumeMounts:
-      - name: usb
-        mountPath: /dev/serial/by-id/usb-0658_0200-if00
-
-    # Path to your zwave device on the host
-    additionalVolumes:
-      - name: usb
-        hostPath:
-          path: /dev/serial/by-id/usb-0658_0200-if00
+      usb:
+        enabled: false
+        type: hostPath
+        hostPath: /dev/serial/by-id/usb-0658_0200-if00
 
     affinity:
       nodeAffinity:
