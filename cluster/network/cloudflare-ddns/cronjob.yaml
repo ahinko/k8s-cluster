@@ -19,27 +19,9 @@ spec:
           containers:
             - name: cloudflare-ddns
               image: curlimages/curl:7.77.0
-              env:
-                - name: ZONE_ID
-                  valueFrom:
-                    secretKeyRef:
-                      name: cloudflare
-                      key: zone_id
-                - name: AUTH_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: cloudflare
-                      key: auth_key
-                - name: RECORD_ID
-                  valueFrom:
-                    secretKeyRef:
-                      name: cloudflare
-                      key: wild_record_id
-                - name: DOMAIN_NAME
-                  valueFrom:
-                    secretKeyRef:
-                      name: cloudflare
-                      key: wild_name
+              envFrom:
+                - secretRef:
+                    name: cloudflare-ddns
               command:
                 - "/bin/sh"
                 - "-ec"
@@ -49,14 +31,14 @@ spec:
 
                   IP=$(curl -s ifconfig.co)
 
-                  if host $NAME 1.1.1.1 | grep "has address" | grep "$IP"; then
-                    echo "$NAME is currently set to $IP; no changes needed"
+                  if host $CLOUDFLARE_DOMAIN_NAME 1.1.1.1 | grep "has address" | grep "$IP"; then
+                    echo "$CLOUDFLARE_DOMAIN_NAME is currently set to $IP; no changes needed"
                     exit 0
                   else
-                    UPDATE=$(curl -X PUT "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records/$RECORD_ID" \
-                        -H "Authorization: Bearer $AUTH_KEY" \
+                    UPDATE=$(curl -X PUT "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/dns_records/$CLOUDFLARE_RECORD_ID" \
+                        -H "Authorization: Bearer $CLOUDFLARE_AUTH_KEY" \
                         -H "Content-Type: application/json" \
-                        --data "{\"type\":\"A\",\"name\":\"$DOMAIN_NAME\",\"content\":\"$IP\"}")
+                        --data "{\"type\":\"A\",\"name\":\"*.$CLOUDFLARE_DOMAIN_NAME\",\"content\":\"$IP\"}")
                   fi
 
                   if echo "$UPDATE" | grep -q '\"success\":false'; then
