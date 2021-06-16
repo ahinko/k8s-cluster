@@ -1,2 +1,2 @@
-bootstrap/consul/*.tgz
-.env
+# Ignore unencrypted secrets
+**/raw.secrets.yaml
