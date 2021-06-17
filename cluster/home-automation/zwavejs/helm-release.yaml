@@ -30,11 +30,13 @@ spec:
 
     service:
       main:
-        port:
-          port: 8091
-      websocket:
-        port:
-          port: 3000
+        ports:
+          http:
+            enabled: true
+            port: 8091
+          websocket:
+            enabled: true
+            port: 3000
 
     ingress:
       main:
