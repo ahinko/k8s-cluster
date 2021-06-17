@@ -1,4 +1,5 @@
 ---
+
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
@@ -20,7 +21,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./cluster
+  path: ./cluster/bootstrap
   prune: true
   sourceRef:
     kind: GitRepository
