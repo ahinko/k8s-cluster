@@ -6,7 +6,7 @@ resources:
   - namespaces
   - tigera-operator
   - metallb-system
+  - kube-system
   - rook-ceph
   - cert-manager
-  - kube-system
   - system-upgrade
