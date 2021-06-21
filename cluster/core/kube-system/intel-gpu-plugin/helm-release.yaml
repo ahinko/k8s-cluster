@@ -20,7 +20,7 @@ spec:
   values:
     image:
       repository: intel/intel-gpu-plugin
-      tag: 0.20.0
+      tag: 0.21.0
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
