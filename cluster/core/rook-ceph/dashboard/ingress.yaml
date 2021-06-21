@@ -1,0 +1,30 @@
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rook-ceph-mgr-dashboard
+  namespace: rook-ceph
+  annotations:
+    kubernetes.io/ingress.class: "internal"
+    forecastle.stakater.com/expose: "true"
+    forecastle.stakater.com/icon: "https://ceph.com/wp-content/uploads/2016/07/Ceph_Logo_Stacked_RGB_Reversed_120411_fa.png"
+    forecastle.stakater.com/network-restricted: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      proxy_ssl_verify off;
+spec:
+  tls:
+    - hosts:
+        - rook.${SECRET_DOMAIN}
+  rules:
+    - host: rook.${SECRET_DOMAIN}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rook-ceph-mgr-dashboard
+                port:
+                  name: https-dashboard

@@ -36,15 +36,15 @@
             ],
             "datasourceTemplate": "helm"
         },
-        // regexManager to read and process actions-runner-controller runner images
+        // regexManager for Cert manager CRDS
         {
-        "fileMatch": [
-            "cluster/actions-runner-system/runners/.+\\.yaml$"
-        ],
-        "matchStrings": [
-            "image: (?<depName>.*?):(?<currentValue>.*?)\n"
-        ],
-        "datasourceTemplate": "docker"
+            "fileMatch": [
+                "cluster/crds/cert-manager/.+\\.yaml$"
+            ],
+            "matchStrings": [
+                "registryUrl=(?<registryUrl>.*?) chart=(?<depName>.*?)\n.*\\/(?<currentValue>.*?)\\/",
+            ],
+            "datasourceTemplate": "helm"
         }
     ],
     "packageRules": [

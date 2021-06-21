@@ -1,0 +1,106 @@
+---
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: home-assistant
+  namespace: home-automation
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: home-assistant
+      version: 9.1.1
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    replicaCount: 1
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 2
+        maxUnavailable: 0
+
+    controllerType: deployment
+    image:
+      repository: ghcr.io/home-assistant/home-assistant
+      tag: 2021.6.5
+    env:
+      TZ: "Europe/Stockholm"
+    hostNetwork: true
+    dnsPolicy: ClusterFirstWithHostNet
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "external"
+          forecastle.stakater.com/expose: "true"
+          forecastle.stakater.com/icon: "https://github.com/home-assistant/assets/blob/master/logo/logo.svg?raw=true"
+          forecastle.stakater.com/network-restricted: "true"
+        hosts:
+          - host: hass.${SECRET_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "hass.${SECRET_DOMAIN}"
+
+    prometheus:
+      serviceMonitor:
+        enabled: false
+
+    persistence:
+      config:
+        enabled: true
+        skipuninstall: true
+        existingClaim: "home-assistant-config"
+
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1000Mi
+      limits:
+        memory: 2500Mi
+
+    addons:
+      codeserver:
+        enabled: true
+        image:
+          repository: codercom/code-server
+          tag: 3.10.2
+        workingDir: "/config"
+        args:
+          - --auth
+          - "none"
+          - --user-data-dir
+          - "/config/.vscode"
+          - --extensions-dir
+          - "/config/.vscode"
+        ingress:
+          enabled: true
+          annotations:
+            kubernetes.io/ingress.class: "internal"
+            nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+            forecastle.stakater.com/expose: "true"
+            forecastle.stakater.com/icon: "https://user-images.githubusercontent.com/674621/71187801-14e60a80-2280-11ea-94c9-e56576f76baf.png"
+            forecastle.stakater.com/network-restricted: "true"
+          hosts:
+            - host: code.${SECRET_DOMAIN}
+              paths:
+                - path: /
+                  pathType: Prefix
+                  service:
+                    name: home-assistant-codeserver
+                    port: 12321
+          tls:
+            - hosts:
+                - "code.${SECRET_DOMAIN}"
+        volumeMounts:
+          - name: config
+            mountPath: /config

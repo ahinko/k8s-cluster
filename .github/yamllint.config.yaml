@@ -6,6 +6,7 @@ ignore: |
   *-crds.yaml
   crds.yaml
   sops.secrets.yaml
+  sops.cluster-secrets.yaml
 
 extends: default
 

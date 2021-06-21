@@ -27,19 +27,7 @@ So a request is made to the VIP and the HAProxy instance running on the node tha
 ## k3s
 We use [k3s](https://www.k3s.io) to setup a lightweight Kubernetes cluster. K3s is installed using Ansible.
 
-## Secret management
-We use Vault to store our secrets in the cluster. [Vault](https://www.vaultproject.io/) uses [Consul](https://www.consul.io/) as storage backend and the final piece of the pussle is the [Vault Secrets Operator](https://github.com/ricoberger/vault-secrets-operator) that creates regular Kubernetes secrets from Vault secrets.
-
-The Vault Secrets Operator also keeps the secrets in sync so if a secret is updated in Vault the Kubernetes secret will be updated automatically.
-
-[Read more](docs/vault.md)
-
 ## Storage
 We use a combination of Rook-Ceph and NFS for storage. Rook-Ceph is used to setup a Ceph cluster on the server nodes. NFS is used to mount the NFS share from our NAS to get access to, mainly media files.
 
 [Troubleshooting & info](docs/rook-ceph.md)
-
-## Bootstrap
-A combination of Ansible and shell scripts is used to bootstrap the cluster.
-
-[Read more](docs/bootstrap.md)
