@@ -15,5 +15,5 @@ resources:
   - kubernetes-stable-charts.yaml
   - mojo2600-pihole-charts.yaml
   - nicholaswilde-charts.yaml
-  - ricoberg-charts.yaml
+  - ricoberger-charts.yaml
   - stakater-charts.yaml
