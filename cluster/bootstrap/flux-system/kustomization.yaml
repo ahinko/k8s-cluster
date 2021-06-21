@@ -7,5 +7,5 @@ resources:
   - gotk-sync.yaml
   - charts
 patchesStrategicMerge:
-  - gotk-patches.yaml
   - sops-config.yaml
+  - gotk-patches.yaml
