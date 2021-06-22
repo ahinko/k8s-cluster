@@ -15,7 +15,7 @@ spec:
         spec:
           containers:
             - name: backup-zwavejs
-              image: registry.${SECRET_DOMAIN}/docker/k8s-volume-backup:stable
+              image: registry.komhem.xyz/docker/k8s-volume-backup:stable
               args:
                 - /bin/sh
                 - /backup.sh
