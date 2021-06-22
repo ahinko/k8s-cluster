@@ -18,17 +18,11 @@ spec:
           env:
             - name: RESTORE_FILE
               # Update the following value with the filename of the backup you want to restore
-              value: "**REPLACE_ME**"
+              value: ""
             - name: MINIO_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: minio-credentials
-                  key: MINIO_ACCESS_KEY
+              value: ""
             - name: MINIO_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: minio-credentials
-                  key: MINIO_SECRET_KEY
+              value: ""
             - name: MINIO_ENDPOINT
               value: "192.168.20.2:9000"
             - name: MINIO_BUCKET

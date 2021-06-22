@@ -3,13 +3,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: restore-zwave2mqtt
-  namespace: home-automation
+  name: restore-pihole
+  namespace: network
 spec:
   template:
     spec:
       containers:
-        - name: restore-zwave2mqtt
+        - name: restore-pihole
           image: registry.komhem.xyz/docker/k8s-volume-backup:stable
           imagePullPolicy: Always
           args:
@@ -18,29 +18,23 @@ spec:
           env:
             - name: RESTORE_FILE
               # Update the following value with the filename of the backup you want to restore
-              value: "**REPLACE_ME**"
+              value: ""
             - name: MINIO_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: minio-credentials
-                  key: MINIO_ACCESS_KEY
+              value: ""
             - name: MINIO_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: minio-credentials
-                  key: MINIO_SECRET_KEY
+              value: ""
             - name: MINIO_ENDPOINT
               value: "192.168.20.2:9000"
             - name: MINIO_BUCKET
-              value: "backup/zwave2mqtt"
+              value: "backup/pihole"
             - name: LOCAL_PATH
-              value: "/zwave"
+              value: "/config"
           volumeMounts:
-            - name: zwave2mqtt-persistent-storage
-              mountPath: /zwave
+            - name: pihole-data
+              mountPath: /config
       volumes:
-        - name: zwave2mqtt-persistent-storage
+        - name: pihole-data
           persistentVolumeClaim:
-            claimName: zwave2mqtt-config
+            claimName: pihole-data
       restartPolicy: Never
   backoffLimit: 4

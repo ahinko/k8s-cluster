@@ -3,13 +3,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: restore-node-red
+  name: restore-zwavejs
   namespace: home-automation
 spec:
   template:
     spec:
       containers:
-        - name: restore-node-red
+        - name: restore-zwavejs
           image: registry.komhem.xyz/docker/k8s-volume-backup:stable
           imagePullPolicy: Always
           args:
@@ -18,29 +18,23 @@ spec:
           env:
             - name: RESTORE_FILE
               # Update the following value with the filename of the backup you want to restore
-              value: "**REPLACE_ME**"
+              value: ""
             - name: MINIO_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: minio-credentials
-                  key: MINIO_ACCESS_KEY
+              value: ""
             - name: MINIO_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: minio-credentials
-                  key: MINIO_SECRET_KEY
+              value: ""
             - name: MINIO_ENDPOINT
               value: "192.168.20.2:9000"
             - name: MINIO_BUCKET
-              value: "backup/node-red"
+              value: "backup/zwave2mqtt"
             - name: LOCAL_PATH
-              value: "/nodered"
+              value: "/zwave"
           volumeMounts:
-            - name: nodered-persistent-storage
-              mountPath: /nodered
+            - name: zwavejs-persistent-storage
+              mountPath: /zwave
       volumes:
-        - name: nodered-persistent-storage
+        - name: zwavejs-persistent-storage
           persistentVolumeClaim:
-            claimName: node-red-data
+            claimName: zwavejs-config
       restartPolicy: Never
   backoffLimit: 4
