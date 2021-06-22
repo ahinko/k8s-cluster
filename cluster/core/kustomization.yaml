@@ -9,4 +9,4 @@ resources:
   - kube-system
   - rook-ceph
   - cert-manager
-  #- system-upgrade
+  - system-upgrade

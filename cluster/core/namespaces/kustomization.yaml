@@ -5,7 +5,6 @@ kind: Kustomization
 resources:
   - metallb-system.yaml
   - cert-manager.yaml
-  #- system-upgrade.yaml
   - network.yaml
   - home-automation.yaml
   - media.yaml
