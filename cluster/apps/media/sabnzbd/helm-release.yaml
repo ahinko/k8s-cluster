@@ -25,36 +25,37 @@ spec:
     env:
       TZ: "Europe/Stockholm"
     ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: "external"
-        forecastle.stakater.com/expose: "true"
-        forecastle.stakater.com/icon: "https://github.com/sabnzbd/sabnzbd/blob/develop/icons/logo-arrow.svg?raw=true"
-        forecastle.stakater.com/network-restricted: "true"
-      hosts:
-        - host: sabnzbd.${SECRET_DOMAIN}
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - "sabnzbd.${SECRET_DOMAIN}"
+      main:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "external"
+          forecastle.stakater.com/expose: "true"
+          forecastle.stakater.com/icon: "https://github.com/sabnzbd/sabnzbd/blob/develop/icons/logo-arrow.svg?raw=true"
+          forecastle.stakater.com/network-restricted: "true"
+        hosts:
+          - host: sabnzbd.${SECRET_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "sabnzbd.${SECRET_DOMAIN}"
     persistence:
       config:
         enabled: true
         skipuninstall: true
         existingClaim: "sabnzbd-config"
-    additionalVolumeMounts:
-      - name: media-atlas
-        mountPath: "/media"
-      - name: tempdl
-        mountPath: "/downloads"
-    additionalVolumes:
-      - name: media-atlas
-        persistentVolumeClaim:
-          claimName: nfs-atlas-media-pvc
-      - name: tempdl
-        emptyDir: {}
+
+      tempdl:
+        enabled: true
+        type: emptyDir
+        mountPath: /downloads
+
+      media:
+        enabled: true
+        skipuninstall: true
+        existingClaim: "nfs-atlas-media-pvc"
+
     resources:
       requests:
         memory: 250Mi
