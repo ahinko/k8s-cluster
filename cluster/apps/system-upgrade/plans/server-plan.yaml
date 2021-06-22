@@ -1,31 +1,28 @@
 ---
 
-# Agent plan
 apiVersion: upgrade.cattle.io/v1
 kind: Plan
 metadata:
-  name: k3s-agent
+  name: k3s-server
   namespace: system-upgrade
-  labels:
-    k3s-upgrade: agent
 spec:
   concurrency: 1
   cordon: true
+  drain:
+    force: true
   nodeSelector:
     matchExpressions:
       - key: node-role.kubernetes.io/master
-        operator: NotIn
+        operator: In
         values:
           - "true"
       - key: k3s-upgrade
         operator: In
         values:
           - "true"
-  prepare:
-    args:
-      - prepare
-      - k3s-server
-    image: rancher/k3s-upgrade
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      operator: Exists
   serviceAccountName: system-upgrade
   upgrade:
     image: rancher/k3s-upgrade
