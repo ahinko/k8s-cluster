@@ -60,7 +60,6 @@ spec:
               - monitoring
               - system-upgrade
               - tigera-operator
-              - vault
           events:
             - create
             - error
@@ -69,7 +68,6 @@ spec:
           namespaces:
             include:
               - rook-ceph
-              - actions-runner-system
               - cert-manager
               - network
           events:
@@ -144,10 +142,8 @@ spec:
           namespaces:
             include:
               - default
-              - actions-runner-system
               - flux-system
               - home-automation
-              - jobs
               - kube-system
               - media
               - metallb-system
@@ -155,7 +151,6 @@ spec:
               - network
               - system-upgrade
               - tigera-operator
-              - vault
           events:
             - create
             - error
@@ -205,8 +200,3 @@ spec:
             - create
             - delete
             - error
-  valuesFrom:
-    - kind: Secret
-      name: "botkube-helm-values"
-      valuesKey: values.yaml
-      optional: false
