@@ -16,7 +16,7 @@ $ ceph dashboard ac-user-create admin -i /tmp/pwd.txt administrator
 
 ## Troubleshooting
 
-On occation we got in a state where the filesystem was degraded but everything else seems to be working fine. No errors no error logs.
+On occation we got in a state where the filesystem was degraded but everything else seems to be working fine. No errors, no logs.
 
 What we did to fix this was to delete each `rook-ceph-mds-myfs-*` pod one at the time. Let the first pod restart before killing the second one.
 
