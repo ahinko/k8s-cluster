@@ -17,7 +17,8 @@
             "cluster/.+\\.yaml$"
         ],
         "ignorePaths": [
-            "cluster/flux-system/"
+            "cluster/bootstrap/flux-system/",
+            "cluster/crds/tigera-operator/"
         ]
     },
     "helm-values": {
@@ -45,7 +46,17 @@
                 "registryUrl=(?<registryUrl>.*?) chart=(?<depName>.*?)\n.*\\/(?<currentValue>.*?)\\/",
             ],
             "datasourceTemplate": "helm"
-        }
+        },
+        // regexManager to read and process Rook-Ceph CRD's
+        {
+            "fileMatch": [
+                "cluster/crds/rook-ceph/.+\\.yaml$"
+            ],
+            "matchStrings": [
+                "registryUrl=(?<registryUrl>.*?) chart=(?<depName>.*?)\n *tag: (?<currentValue>.*)\n",
+            ],
+            "datasourceTemplate": "helm"
+        },
     ],
     "packageRules": [
         // setup datasources
