@@ -1,2 +1,3 @@
 # Ignore unencrypted secrets
 **/raw.secrets.yaml
+.env
