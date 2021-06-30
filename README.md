@@ -3,13 +3,13 @@
 ### My Kubernetes cluster running at home :sailboat:
 _... automated management with Flux & updated by RenovateBot_ :robot:
 
-<br/>
-<br/>
+<br />
+<br />
 <br />
 <br />
 
-## we
-So this is my Kubernetes cluster that is running at home serving both home automation, media and other services.
+## Welcome
+So this is our Kubernetes cluster that is running at home serving both home automation, media and other services.
 
 ## Automation
 We use a few different tools to automate as much as possible of the setup and maintenance of the cluster.
