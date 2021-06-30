@@ -1,0 +1,12 @@
+---
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespaces
+  - tigera-operator
+  - metallb-system
+  - kube-system
+  - rook-ceph
+  - cert-manager
+  - system-upgrade

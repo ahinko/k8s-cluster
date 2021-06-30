@@ -1,0 +1,103 @@
+---
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: pihole
+  namespace: network
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://mojo2600.github.io/pihole-kubernetes/
+      chart: pihole
+      version: 2.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: mojo2600-pihole
+        namespace: flux-system
+      interval: 5m
+  values:
+    replicaCount: 1
+
+    maxSurge: 1
+    maxUnavailable: 0
+
+    image:
+      repository: "pihole/pihole"
+      tag: v5.8.1
+
+    podAnnotations:
+      secret.reloader.stakater.com/reload: "pihole-password"
+
+    serviceDns:
+      type: LoadBalancer
+      loadBalancerIP: 192.168.20.205
+      annotations:
+        metallb.universe.tf/allow-shared-ip: pihole-svc
+
+    serviceWeb:
+      type: LoadBalancer
+      loadBalancerIP: 192.168.20.205
+      annotations:
+        metallb.universe.tf/allow-shared-ip: pihole-svc
+
+    serviceDhcp:
+      enabled: false
+
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "internal"
+        forecastle.stakater.com/expose: "true"
+        forecastle.stakater.com/icon: "https://camo.githubusercontent.com/9426a93d32aa9f5ad757b2befcdb762a270d344efd6b8d287a2cea2c4c2233b8/68747470733a2f2f70692d686f6c652e6769746875622e696f2f67726170686963732f566f727465782f566f727465785f776974685f576f72646d61726b2e737667"
+        forecastle.stakater.com/network-restricted: "true"
+      hosts:
+        - pihole.${SECRET_DOMAIN}
+      tls:
+        - hosts:
+            - pihole.${SECRET_DOMAIN}
+
+    resources:
+      requests:
+        memory: "128Mi"
+        cpu: "250m"
+      limits:
+        memory: "256Mi"
+        cpu: "500m"
+
+    persistentVolumeClaim:
+      # set to true to use pvc
+      enabled: true
+      # set to true to use you own pvc
+      existingClaim: pihole-data
+
+    # Use an existing secret for the admin password.
+    admin:
+      existingSecret: "pihole-password"
+      passwordKey: "password"
+
+    # extraEnvironmentVars is a list of extra enviroment variables to set for pihole to use
+    extraEnvVars:
+      TZ: Europe/Stockholm
+
+    # default upstream DNS servers to use
+    DNS1: "192.168.20.5"
+    DNS2: "192.168.20.7"
+
+    monitoring:
+      podMonitor:
+        enabled: false
+      sidecar:
+        enabled: false
+        port: 9617
+        image:
+          repository: ekofr/pihole-exporter
+          tag: v0.0.11
+          pullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi

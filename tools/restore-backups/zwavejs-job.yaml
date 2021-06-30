@@ -1,0 +1,40 @@
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: restore-zwavejs
+  namespace: home-automation
+spec:
+  template:
+    spec:
+      containers:
+        - name: restore-zwavejs
+          image: registry.komhem.xyz/docker/k8s-volume-backup:stable
+          imagePullPolicy: Always
+          args:
+            - /bin/sh
+            - /restore.sh
+          env:
+            - name: RESTORE_FILE
+              # Update the following value with the filename of the backup you want to restore
+              value: ""
+            - name: MINIO_ACCESS_KEY
+              value: ""
+            - name: MINIO_SECRET_KEY
+              value: ""
+            - name: MINIO_ENDPOINT
+              value: "192.168.20.2:9000"
+            - name: MINIO_BUCKET
+              value: "backup/zwave2mqtt"
+            - name: LOCAL_PATH
+              value: "/zwave"
+          volumeMounts:
+            - name: zwavejs-persistent-storage
+              mountPath: /zwave
+      volumes:
+        - name: zwavejs-persistent-storage
+          persistentVolumeClaim:
+            claimName: zwavejs-config
+      restartPolicy: Never
+  backoffLimit: 4

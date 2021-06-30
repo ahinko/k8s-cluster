@@ -1,0 +1,89 @@
+---
+
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: zwavejs
+  namespace: home-automation
+spec:
+  interval: 5m
+  chart:
+    spec:
+      # renovate: registryUrl=https://k8s-at-home.com/charts/
+      chart: zwavejs2mqtt
+      version: 4.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: 5m
+  values:
+    image:
+      repository: ghcr.io/zwave-js/zwavejs2mqtt
+      tag: 5.2.1
+
+    strategy:
+      type: Recreate
+
+    env:
+      TZ: "Europe/Stockholm"
+
+    service:
+      main:
+        ports:
+          http:
+            enabled: true
+            port: 8091
+          websocket:
+            enabled: true
+            port: 3000
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "internal"
+          forecastle.stakater.com/expose: "true"
+          forecastle.stakater.com/icon: "https://raw.githubusercontent.com/zwave-js/zwavejs2mqtt/master/docs/_images/zwavejs_logo.svg"
+          forecastle.stakater.com/network-restricted: "true"
+        hosts:
+          - host: zwavejs.${SECRET_DOMAIN}
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - "zwavejs.${SECRET_DOMAIN}"
+
+    # Privileged may be required if USB controller is accessed directly through the host machine
+    securityContext:
+      privileged: true
+
+    persistence:
+      config:
+        enabled: true
+        mountPath: /usr/src/app/store
+        skipuninstall: true
+        existingClaim: "zwavejs-config"
+      usb:
+        enabled: true
+        type: hostPath
+        hostPath: /dev/serial/by-id/usb-0658_0200-if00
+
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: feature.node.kubernetes.io/custom-zwave
+                  operator: In
+                  values:
+                    - "true"
+
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "250m"
+      limits:
+        memory: "512Mi"
+        cpu: "500m"

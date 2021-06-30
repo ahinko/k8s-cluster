@@ -1,0 +1,19 @@
+---
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - bitnami-charts.yaml
+  - deliveryhero-charts.yaml
+  - frigate-charts.yaml
+  - infracloudio-charts.yaml
+  - ingress-nginx-charts.yaml
+  - jetstack-charts.yaml
+  - k8s-at-home-charts.yaml
+  - kubernetes-sigs-descheduler-charts.yaml
+  - kubernetes-sigs-node-feature-discovery-charts.yaml
+  - kubernetes-stable-charts.yaml
+  - mojo2600-pihole-charts.yaml
+  - nicholaswilde-charts.yaml
+  - ricoberger-charts.yaml
+  - stakater-charts.yaml

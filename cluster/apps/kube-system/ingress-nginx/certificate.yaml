@@ -1,0 +1,15 @@
+---
+
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  namespace: kube-system
+  name: certificate
+spec:
+  secretName: cert-wildcard
+  issuerRef:
+    name: cluster-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - '*.${SECRET_DOMAIN}'
+    - ${SECRET_DOMAIN}

@@ -3,7 +3,7 @@ version: '3'
 
 vars:
   PACKAGES: |-
-    ansible fluxcd/tap/flux kubectl pre-commit shellcheck yamllint wget yq gnu-sed
+    ansible fluxcd/tap/flux kubectl pre-commit shellcheck yamllint wget yq gnu-sed sops
 tasks:
   install:
     desc: Verify that all required dependencies are installed
