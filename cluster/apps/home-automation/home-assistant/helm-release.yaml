@@ -85,7 +85,7 @@ spec:
         ingress:
           enabled: true
           annotations:
-            kubernetes.io/ingress.class: "external"
+            kubernetes.io/ingress.class: "internal"
             nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
             forecastle.stakater.com/expose: "true"
             forecastle.stakater.com/icon: "https://user-images.githubusercontent.com/674621/71187801-14e60a80-2280-11ea-94c9-e56576f76baf.png"
