@@ -19,8 +19,8 @@ spec:
       interval: 5m
   values:
     image:
-      #repository: ghcr.io/zwave-js/zwavejs2mqtt
-      tag: 5.2.1
+      repository: ghcr.io/zwave-js/zwavejs2mqtt
+      tag: 5.2.2
 
     strategy:
       type: Recreate
